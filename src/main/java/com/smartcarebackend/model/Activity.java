@@ -16,7 +16,7 @@ public class Activity {
     private Long activityId; //활동 아이디
 
     @CreationTimestamp
-    @Column(name = "ACTIVITY_LAST-DT", nullable = false)
+    @Column(name = "ACTIVITY_LAST_DT", nullable = false)
     private LocalDateTime activityLastDt; //최근 측정일
 
     @Column(name = "ACTIVITY_SKELETAL_MASS", nullable = false)
