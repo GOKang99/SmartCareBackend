@@ -14,7 +14,7 @@ import lombok.ToString;
 public class Guard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "GUARD_I D", length = 10, nullable = false)
+    @Column(name = "GUARD_ID", length = 10, nullable = false)
     private Long guardId;  // 보호자 ID (Primary Key)
 
 //    @ManyToOne
