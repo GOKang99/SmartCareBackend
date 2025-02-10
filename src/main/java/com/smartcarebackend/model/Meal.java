@@ -10,9 +10,8 @@ import java.time.LocalTime;
 @Entity
 @Data
 public class Meal {
-
     @Id
-    @Column(name = "med_id")
+    @Column(name = "MED_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long medId; //식사일지 아이디
 
