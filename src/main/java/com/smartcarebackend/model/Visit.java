@@ -56,5 +56,5 @@ public class Visit {
     private LocalDateTime createdAt; // 예약 생성 시간 (자동 설정)
 
     @Column(name = "REMARK", columnDefinition = "TEXT")
-    private String remark; // 비고
+    private String remark; // 비고 비고 수정
 }
