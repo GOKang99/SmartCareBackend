@@ -48,19 +48,19 @@ public class Cist {
     private LocalDateTime cisModifyDt; // 수정 날짜
 
     // 총점을 계산하고 판정을 업데이트하는 메서드
-    public void calculateTotalAndGrade() {
-        // 총점 계산
-        this.totalScore = this.orientation + this.attention + this.spatialTemporal
-                            + this.executiveFunction + this.memory + this.language;
-
-        // 판정 기준에 맞는 판정 부여
-        if (this.totalScore <= 10) {
-            this.cisGrade = "심각";
-        } else if (this.totalScore <= 24) {
-            this.cisGrade = "보통";
-        } else {
-            this.cisGrade = "정상";
-        }
-    }
+//    public void calculateTotalAndGrade() {
+//        // 총점 계산
+//        this.totalScore = this.orientation + this.attention + this.spatialTemporal
+//                            + this.executiveFunction + this.memory + this.language;
+//
+//        // 판정 기준에 맞는 판정 부여
+//        if (this.totalScore <= 10) {
+//            this.cisGrade = "심각";
+//        } else if (this.totalScore <= 24) {
+//            this.cisGrade = "보통";
+//        } else {
+//            this.cisGrade = "정상";
+//        }
+//    }
 
 }
