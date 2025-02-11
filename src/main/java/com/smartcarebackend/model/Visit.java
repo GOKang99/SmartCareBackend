@@ -52,7 +52,7 @@ public class Visit {
     private Boolean visYn; //방문여부 방문하였다면 true 미방문시 false 기본 값:false
 
     @CreationTimestamp
-    @Column(name = "CREATED_AT", nullable = false, updatable = false)
+    @Column(name = "CREATED_AT", nullable = false, updatable = false) //업데이트시에는 업데이트 하지 않음
     private LocalDateTime createdAt; // 예약 생성 시간 (자동 설정)
 
     @Column(name = "REMARK", columnDefinition = "TEXT")
