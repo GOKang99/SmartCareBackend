@@ -28,4 +28,9 @@ public class VisitServiceImpl implements VisitService {
         return VisitByGuard;
     }
 
+    @Override
+    public Visit createVisit(Long guardId, Long resId) {
+        return null;
+    }
+
 }

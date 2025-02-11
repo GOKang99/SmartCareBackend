@@ -23,4 +23,6 @@ public class VisitController {
     public List<Visit> getMyVisit(@PathVariable Long guardId) {
         return visitService.getVisitsByGuardId(guardId);
     }
+
+
 }
