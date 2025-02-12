@@ -10,7 +10,7 @@ public interface VisitService {
     List<Visit> getAllVisits();
 
     //로그인 후 개인 예약 내역을 확인하는 메소드
-    List<Visit> getVisitsByGuardId(Long guardId);
+    List<Visit> getVisitsByGuardId(Long userId);
 
     Visit createVisit(Long guardId, Long resId  );
 }

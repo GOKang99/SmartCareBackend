@@ -19,9 +19,9 @@ public class VisitController {
         return visitService.getAllVisits();
     }
 
-    @GetMapping("/{guardId}") //보호자 화면에 표시 되는 코드
-    public List<Visit> getMyVisit(@PathVariable Long guardId) {
-        return visitService.getVisitsByGuardId(guardId);
+    @GetMapping("/{userId}") //보호자 화면에 표시 되는 코드
+    public List<Visit> getMyVisit(@PathVariable Long userId) {
+        return visitService.getVisitsByGuardId(userId);
     }
 
 

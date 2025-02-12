@@ -20,16 +20,16 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
-    public List<Visit> getVisitsByGuardId(Long guardId) {
-        List<Visit> VisitByGuard = visitRepository.findByGuardId(guardId);
-        if(VisitByGuard.isEmpty()||VisitByGuard==null){
-            throw  new RuntimeException("No Guard Found");
+    public List<Visit> getVisitsByGuardId(Long userId) {
+        List<Visit> VisitByUser = visitRepository.findByUserId(userId);
+        if(VisitByUser.isEmpty()||VisitByUser==null){
+            throw  new RuntimeException("No User Found");
         }
-        return VisitByGuard;
+        return VisitByUser;
     }
 
     @Override
-    public Visit createVisit(Long guardId, Long resId) {
+    public Visit createVisit(Long userId, Long resId) {
         return null;
     }
 

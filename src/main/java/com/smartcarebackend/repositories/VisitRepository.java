@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface VisitRepository extends JpaRepository<Visit, Long> {
 
-    List<Visit> findByGuardId(Long guardId);
+    List<Visit> findByUserId(Long userId);
 }
