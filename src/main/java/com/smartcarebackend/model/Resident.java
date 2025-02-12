@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -83,4 +84,7 @@ public class Resident {
 
     @Column(name = "res_image_address")
     private String resImageAddress; // 입소자 사진
+
+    @ManyToMany(mappedBy = "residents")
+    private List<User> users;
 }
