@@ -21,11 +21,8 @@ public class Visit {
     @Column(name = "VIS_ID" )
     private Long visId; //예약 등록 기본 키
 
-    @Column(name = "GIVER_ID")
-    private String giverId; // 요양사 ID
-
-    @Column(name = "GUARD_ID")
-    private Long guardId; // 보호자 ID
+    @Column(name = "USER_ID")
+    private Long userId; // 유저 Id
 
     @Column(name = "RES_ID")
     private Long resId; // 입소자 ID
