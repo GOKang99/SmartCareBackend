@@ -21,6 +21,9 @@ public class Resident {
     @Column(name = "giver_id")
     private Long giverId;
 
+    @Column(name = "res_name")
+    private String resName; // 이름
+
     @Column(name = "res_genter", length = 10)
     private String resGenter; // 성별
 
