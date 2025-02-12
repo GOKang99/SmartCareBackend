@@ -21,11 +21,8 @@ public class Visit {
     @Column(name = "VIS_ID" )
     private Long visId; //예약 등록 기본 키
 
-    @Column(name = "GIVER_ID")
-    private String giverId; // 요양사 ID
-
-    @Column(name = "GUARD_ID")
-    private Long guardId; // 보호자 ID
+    @Column(name = "USER_ID")
+    private Long userId; // 유저 Id
 
     @Column(name = "RES_ID")
     private Long resId; // 입소자 ID
@@ -52,7 +49,7 @@ public class Visit {
     private Boolean visYn; //방문여부 방문하였다면 true 미방문시 false 기본 값:false
 
     @CreationTimestamp
-    @Column(name = "CREATED_AT", nullable = false, updatable = false)
+    @Column(name = "CREATED_AT", nullable = false, updatable = false) //업데이트시에는 업데이트 하지 않음
     private LocalDateTime createdAt; // 예약 생성 시간 (자동 설정)
 
     @Column(name = "REMARK", columnDefinition = "TEXT")
