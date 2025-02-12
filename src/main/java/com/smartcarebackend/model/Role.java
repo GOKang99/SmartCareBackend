@@ -29,7 +29,12 @@ public class Role {
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JsonBackReference
     @ToString.Exclude
-    private Set<Guard> users = new HashSet<>();
+    private Set<Guard> guards = new HashSet<>();
+
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JsonBackReference
+    @ToString.Exclude
+    private Set<Giver> giver = new HashSet<>();
 
     public Role(AppRole roleName) {
         this.roleName = roleName;
