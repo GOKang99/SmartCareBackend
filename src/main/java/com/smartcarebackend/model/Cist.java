@@ -28,10 +28,10 @@ public class Cist {
     @Column(name = "CIS_ATTENTION", nullable = false)
     private Long attention; //주의력 점수:3
 
-    @Column(name = "CIS_SPATIAL-TEMPORAL", nullable = false)
+    @Column(name = "CIS_SPATIAL_EMPORAL", nullable = false)
     private Long spatialTemporal; //시공간가능 점수:2
 
-    @Column(name = "CIS_EXECUTIVE-FUNCTION", nullable = false)
+    @Column(name = "CIS_EXECUTIVE_FUNCTION", nullable = false)
     private Long executiveFunction; //집행기능 점수:6
 
     @Column(name = "CIS_MEMORY", nullable = false)
