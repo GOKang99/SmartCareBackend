@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -38,6 +40,14 @@ public class User {
     @JsonBackReference
     @ToString.Exclude
     private Role role;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_resident",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "resident_id")
+    )
+    private List<Resident> residents;
 
     @Override
     public boolean equals(Object o) {

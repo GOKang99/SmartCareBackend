@@ -1,12 +1,12 @@
 package com.smartcarebackend.model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -80,4 +80,7 @@ public class Resident {
 
     @Column(name = "res_image_address")
     private String resImageAddress;
+
+    @ManyToMany(mappedBy = "residents")
+    private List<User> users;
 }
