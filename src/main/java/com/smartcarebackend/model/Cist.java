@@ -47,6 +47,14 @@ public class Cist {
     @Column(name = "CIS_MODIFY_DT", nullable = false)
     private LocalDateTime cisModifyDt; // 수정 날짜
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "giver_id", referencedColumnName = "giverId")
+    private Giver giver;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "res_id", referencedColumnName = "resId")
+    private Resident resident;
+
     // 총점을 계산하고 판정을 업데이트하는 메서드
 //    public void calculateTotalAndGrade() {
 //        // 총점 계산

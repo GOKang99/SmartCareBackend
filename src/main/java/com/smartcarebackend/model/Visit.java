@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,12 +21,6 @@ public class Visit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VIS_ID" )
     private Long visId; //예약 등록 기본 키
-
-    @Column(name = "USER_ID")
-    private Long userId; // 유저 Id
-
-    @Column(name = "RES_ID")
-    private Long resId; // 입소자 ID
 
     @Column(name = "VIS_Date", nullable = false)
     private LocalDate visDate; // 일자
@@ -53,5 +48,13 @@ public class Visit {
     private LocalDateTime createdAt; // 예약 생성 시간 (자동 설정)
 
     @Column(name = "REMARK", columnDefinition = "TEXT")
-    private String remark; // 비고 비고 수정
+    private String remark; // 비고
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "res_id", referencedColumnName = "resId")
+    private Resident resident;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "giver_id", referencedColumnName = "giverId")
+    private Giver giver;
 }

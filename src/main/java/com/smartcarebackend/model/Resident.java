@@ -17,10 +17,7 @@ public class Resident {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long redId;
-
-    @Column(name = "giver_id")
-    private Long giverId;
+    private Long resId;
 
     @Column(name = "res_name")
     private String resName; // 이름
@@ -85,6 +82,22 @@ public class Resident {
     @Column(name = "res_image_address")
     private String resImageAddress; // 입소자 사진
 
-    @ManyToMany(mappedBy = "residents")
-    private List<User> users;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "giver_id", referencedColumnName = "giverId")
+    private Giver giver;
+
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Guard> guards;
+
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Cist> cists;
+
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Activity> acts;
+
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Meal> meals;
+
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Visit> visits;
 }
