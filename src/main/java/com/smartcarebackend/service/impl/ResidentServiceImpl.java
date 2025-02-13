@@ -104,7 +104,9 @@ public class ResidentServiceImpl implements ResidentService {
             resident.setResImageAddress(resFileName);
         }
         resident.setGiver(resident.getGiver()); // 요양보호사 ID
-        resident.setResName(residentDTO.getResName()); // 이름
+        if(residentDTO.getResName() != null){
+            resident.setResName(residentDTO.getResName()); // 이름
+        }
         resident.setResGender(residentDTO.getResGender()); // 성별
         resident.setResBirth(residentDTO.getResBirth());; // 생년월일
         resident.setResPhone(residentDTO.getResPhone()); // 전화번호
