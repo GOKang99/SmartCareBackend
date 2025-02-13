@@ -69,6 +69,26 @@ public class VisitServiceImpl implements VisitService {
       return entityToDTO(savedVisit);
     }
 
+    //예약 수정
+    @Override
+    public VisitDTO updateVisit(Long visitId, VisitDTO visitDTO) {
+        Visit updateVisit = visitRepository.findById(visitId)
+                .orElseThrow(()->new RuntimeException(visitId+"해당 예약이 없습니다."));
+
+        updateVisit.setVisTime(visitDTO.getVisTime());
+        updateVisit.setVisTp(visitDTO.getVisTp());
+        updateVisit.setVisRelation(visitDTO.getVisRelation());
+        updateVisit.setVisCnt(visitDTO.getVisCnt());
+        updateVisit.setVisApply(visitDTO.getVisApply());
+        updateVisit.setVisYn(visitDTO.getVisYn());
+        updateVisit.setRemark(visitDTO.getRemark());
+
+        Visit updatedVisit = visitRepository.save(updateVisit);
+        return entityToDTO(updatedVisit);
+    }
+
+
+
 
     // DTO -> Entity
     private Visit dtoToEntity(VisitDTO dto) {

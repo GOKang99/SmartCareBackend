@@ -16,4 +16,9 @@ public interface VisitService {
     VisitDTO getVisitByIdAndGuardId(Long visitId, Long guardId);
     //예약 생성
     VisitDTO createVisit(Long guardId, VisitDTO visitDTO);
+
+    //예약 업데이트
+    VisitDTO updateVisit(Long visitId, VisitDTO visitDTO);
+
+
 }
