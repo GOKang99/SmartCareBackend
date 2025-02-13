@@ -17,7 +17,7 @@ public class ResidentDTO {
 
     private String resName; // 이름
 
-    private String resGenter; // 성별
+    private String resGender; // 성별
 
     private LocalDate resBirth; // 생년월일
 
