@@ -17,5 +17,5 @@ public interface ResidentService {
     void deleteResident(Long redId);
 
     // 모든 입소자 조회
-    List<Resident> getAllResidents();
+    List<Resident> getAllResidents(ResidentDTO residentDTO);
 }

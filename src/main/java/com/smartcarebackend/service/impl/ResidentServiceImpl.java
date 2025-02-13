@@ -28,6 +28,7 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
 
+    // 입소자 정보 등록
     @Override
     public Resident createResident(ResidentDTO residentDTO) {
         MultipartFile resImages = residentDTO.getResImages();
@@ -82,13 +83,26 @@ public class ResidentServiceImpl implements ResidentService {
         return null;
     }
 
+    // 입소자 정보 삭제
     @Override
     public void deleteResident(Long redId) {
+        try {
+            Resident resident = residentRepository.findById(redId).get();
+            String uploadImages = "public/images/";
+            Path uploadImagesPath = Paths.get(uploadImages + resident.getResImageAddress());
 
+            try {
+                Files.delete(uploadImagesPath);
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+        }
+            residentRepository.delete(resident);
+    } catch (Exception e) {
+        System.out.println("Error: " + e.getMessage());}
     }
 
     @Override
-    public List<Resident> getAllResidents() {
+    public List<Resident> getAllResidents(ResidentDTO residentDTO) {
         return List.of();
     }
 }
