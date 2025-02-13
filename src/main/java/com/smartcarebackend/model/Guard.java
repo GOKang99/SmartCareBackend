@@ -23,7 +23,7 @@ public class Guard {
     @Column(length = 15)
     private String phone;  //휴대폰 번호
 
-    @Column(length = 13, unique = true)
+    @Column(length = 30)
     private String ssn;  //주민등록번호 (중복 체크)
 
     @Column(nullable = false)
