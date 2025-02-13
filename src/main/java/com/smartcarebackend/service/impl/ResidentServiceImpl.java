@@ -82,7 +82,7 @@ public class ResidentServiceImpl implements ResidentService {
     @Override
     public Resident updateResident(Long redId, ResidentDTO residentDTO) {
         Resident resident = residentRepository.findById(redId).get();
-        if (!residentDTO.getResImages().isEmpty()){
+        if (residentDTO.getResImages() != null){
             String uploadImages = "public/images";
             Path oldImagePath = Paths.get(uploadImages + resident.getResImageAddress());
             try {
@@ -103,7 +103,6 @@ public class ResidentServiceImpl implements ResidentService {
 
             resident.setResImageAddress(resFileName);
         }
-
         resident.setGiver(resident.getGiver()); // 요양보호사 ID
         resident.setResName(residentDTO.getResName()); // 이름
         resident.setResGender(residentDTO.getResGender()); // 성별
@@ -125,7 +124,6 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setResCareGroup(residentDTO.getResCareGroup()); // 케어그룹
         resident.setResFoodType(residentDTO.getResFoodType()); // 식사종류
         resident.setResFunctionDis(residentDTO.getResFunctionDis()); // 기능장애
-
         return residentRepository.save(resident);
     }
 

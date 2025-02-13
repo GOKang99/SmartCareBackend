@@ -25,7 +25,7 @@ public class ResidentController {
     // 입소자 수정 API
     @PutMapping("/{resId}")
     public Resident update(ResidentDTO residentDTO, @PathVariable Long resId) {
-        System.out.println("아이디??" + resId);
+        System.out.println("변경된 내용: " + residentDTO);
         return residentService.updateResident(resId, residentDTO);
     }
 
