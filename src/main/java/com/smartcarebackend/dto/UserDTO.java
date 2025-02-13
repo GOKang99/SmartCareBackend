@@ -10,12 +10,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-    private Long userId;
-    private String username;
+    private Long userId; // 유저 PK
+    private String username; // 유저 이름
     private String email;
     private String relation;  // 환자와의 관계 (부모, 자녀 등)
     private String phone;  // 연락처
     private boolean agree;  // 약관 동의 여부
     private String roleName; // 역할(Role) 이름
-    private List<ResidentDTO> residents; // 입소자 정보 (연결된 입소자 리스트)
+
+    private Long residentId;
+    private String residentName;
+    private String residentImage;
 }
