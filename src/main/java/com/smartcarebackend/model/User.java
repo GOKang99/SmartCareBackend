@@ -41,13 +41,13 @@ public class User {
     @ToString.Exclude
     private Role role;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_resident",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "resident_id")
-    )
-    private List<Resident> residents;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(nullable = true)
+    private Giver giver;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(nullable = true)
+    private Guard guard;
 
     @Override
     public boolean equals(Object o) {

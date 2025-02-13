@@ -64,6 +64,14 @@ public class Meal {
     @Column(name = "REMARK", length = 255)
     private String remark;  // 비고
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "res_id", referencedColumnName = "resId")
+    private Resident resident;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "giver_id", referencedColumnName = "giverId")
+    private Giver giver;
+
     //@Column(name = "DIETARY_CURE", length = 50)
     //private String dietaryCure; // 치료식이
 }

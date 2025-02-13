@@ -17,9 +17,6 @@ public class Notice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "NOTICE_ID")
     private Long noticeId; // 공지사항 고유 ID
-
-    @Column(name = "GIVER_ID", nullable = false)
-    private String giverId; // 공지를 작성한 사람의 ID
     
     @Column(name = "NOTICE_TP", nullable = false, length = 20)
     private String noticeType; // 공지 유형 (식단, 계획표, 진료일정)
@@ -38,4 +35,8 @@ public class Notice {
 
     @Column(name = "NOTICE_COUNT", nullable = false)
     private int noticeCount = 0; // 공지 조회수 (기본값 : 0 )
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "giver_id", referencedColumnName = "giverId")
+    private Giver giver;
 }

@@ -33,4 +33,12 @@ public class Activity {
 
     @Column(name = "ACTIVITY_FAT_PERCENT", nullable = false)
     private Double fatPercent; //체지방률
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "res_id", referencedColumnName = "resId")
+    private Resident resident;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "giver_id", referencedColumnName = "giverId")
+    private Giver giver;
 }
