@@ -1,6 +1,7 @@
 package com.smartcarebackend.service.impl;
 
 import com.smartcarebackend.dto.VisitDTO;
+import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Visit;
 import com.smartcarebackend.repositories.GiverRepository;
 import com.smartcarebackend.repositories.GuardRepository;
@@ -49,6 +50,23 @@ public class VisitServiceImpl implements VisitService {
 
         return entityToDTO(visit);
 
+    }
+
+    //예약 생성
+    @Override
+    public VisitDTO createVisit(Long guardId, VisitDTO visitDTO) {
+        //visitDTO 객체를 엔티티로 변환 
+      Visit visit = dtoToEntity(visitDTO);
+      //받은 guardId를 Guard객체로 변환
+      Guard guard = guardRepository.findById(guardId)
+              .orElseThrow(()->new RuntimeException(guardId+"해당 Guard가 없습니다."));
+
+      //Visit엔티티의 Guard객체 guardId로 저장 
+      visit.setGuard(guard);
+      //최종적으로 저장
+      Visit savedVisit = visitRepository.save(visit);
+
+      return entityToDTO(savedVisit);
     }
 
 

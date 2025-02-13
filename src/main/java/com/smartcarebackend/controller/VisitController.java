@@ -26,10 +26,18 @@ public class VisitController {
         List<VisitDTO> visits = visitService.getAllVisitsByGuardId(guardId);
         return visits;
     }
-
+    //보호자 아이디+예약번호로 예약 조회
     @GetMapping("/{visitId}/guard/{guardId}")
     public VisitDTO getVisitByVisIdAndGuardId(@PathVariable Long visitId, @PathVariable Long guardId) {
         VisitDTO visit = visitService.getVisitByIdAndGuardId(visitId, guardId);
         return visit;
+    }
+
+    //보호자아이디로 예약 생성하기
+    @PostMapping("/create/{guardId}")
+    public VisitDTO createVisit(@PathVariable Long guardId, @RequestBody VisitDTO visitDTO) {
+        VisitDTO createdVisit = visitService.createVisit(guardId,visitDTO);
+        return createdVisit;
+
     }
 }

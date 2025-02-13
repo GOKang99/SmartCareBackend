@@ -14,4 +14,6 @@ public interface VisitService {
 
     //보호자+예약번호로 조회
     VisitDTO getVisitByIdAndGuardId(Long visitId, Long guardId);
+    //예약 생성
+    VisitDTO createVisit(Long guardId, VisitDTO visitDTO);
 }
