@@ -50,27 +50,28 @@ public class ResidentServiceImpl implements ResidentService {
         }
 
         Resident resident = new Resident();
+        resident.setGiver(resident.getGiver()); // 요양보호사 ID
+        resident.setResName(residentDTO.getResName()); // 이름
+        resident.setResGender(residentDTO.getResGender()); // 성별
+        resident.setResBirth(residentDTO.getResBirth());; // 생년월일
+        resident.setResPhone(residentDTO.getResPhone()); // 전화번호
+        resident.setResGrade(residentDTO.getResGrade()); // 등급
+        resident.setDementiaYn(residentDTO.isDementiaYn()); // 치매 유무
+        resident.setFallYn(residentDTO.isFallYn()); // 낙상 위험
+        resident.setBedsoreYn(residentDTO.isBedsoreYn()); // 욕창 위험
+        resident.setPostureYn(residentDTO.isPostureYn()); // 자세변경
+        resident.setResDisease(residentDTO.getResDisease()); // 주요질환
+        resident.setResLocation(residentDTO.getResLocation()); // 생활실
+        resident.setResEnterDate(residentDTO.getResEnterDate()); // 입소일
+        resident.setResExitDate(residentDTO.getResExitDate()); // 퇴소일
+        resident.setResAddress(residentDTO.getResAddress()); // 주소
+        resident.setSystemResCode(residentDTO.getSystemResCode()); // 요양시스템 입소자 코드
+        resident.setResSchoolGrade(residentDTO.getResSchoolGrade()); // 최종학력
+        resident.setResLongTermCareNo(residentDTO.getResLongTermCareNo()); // 장기요양인정번호
+        resident.setResCareGroup(residentDTO.getResCareGroup()); // 케어그룹
+        resident.setResFoodType(residentDTO.getResFoodType()); // 식사종류
+        resident.setResFunctionDis(residentDTO.getResFunctionDis()); // 기능장애
 
-        resident.setResName(residentDTO.getResName());  // 이름 설정
-        resident.setResGender(residentDTO.getResGender()); // 성별 설정
-        resident.setResBirth(residentDTO.getResBirth());  // 생년월일 설정
-        resident.setResPhone(residentDTO.getResPhone());  // 전화번호 설정
-        resident.setResGrade(residentDTO.getResGrade());  // 등급 설정
-        resident.setDementiaYn(residentDTO.isDementiaYn());  // 치매 유무 설정
-        resident.setFallYn(residentDTO.isFallYn());  // 낙상 위험 설정
-        resident.setBedsoreYn(residentDTO.isBedsoreYn());  // 욕창 위험 설정
-        resident.setPostureYn(residentDTO.isPostureYn());  // 자세변경 설정
-        resident.setResDisease(residentDTO.getResDisease());  // 주요질환 설정
-        resident.setResLocation(residentDTO.getResLocation());  // 생활실 설정
-        resident.setResEnterDate(residentDTO.getResEnterDate());  // 입소일 설정
-        resident.setResExitDate(residentDTO.getResExitDate());  // 퇴소일 설정
-        resident.setResAddress(residentDTO.getResAddress());  // 주소 설정
-        resident.setSystemResCode(residentDTO.getSystemResCode());  // 요양시스템 입소자 코드 설정
-        resident.setResSchoolGrade(residentDTO.getResSchoolGrade());  // 최종학력 설정
-        resident.setResLongTermCareNo(residentDTO.getResLongTermCareNo());  // 장기요양인정번호 설정
-        resident.setResCareGroup(residentDTO.getResCareGroup());  // 케어그룹 설정
-        resident.setResFoodType(residentDTO.getResFoodType());  // 식사종류 설정
-        resident.setResFunctionDis(residentDTO.getResFunctionDis());  // 기능장애 설정
         resident.setResImageAddress(resFileName); // 이미지 주소
 
         return residentRepository.save(resident);
