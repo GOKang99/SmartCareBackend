@@ -22,6 +22,13 @@ public class ResidentController {
 
     }
 
+    // 입소자 수정 API
+    @PutMapping("/{resId}")
+    public Resident update(ResidentDTO residentDTO, @PathVariable Long resId) {
+        System.out.println("아이디??" + resId);
+        return residentService.updateResident(resId, residentDTO);
+    }
+
     // 입소자 삭제 API
     @DeleteMapping("/{resId}")
     public void delete(@PathVariable Long resId) {
