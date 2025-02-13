@@ -26,4 +26,10 @@ public class VisitController {
         List<VisitDTO> visits = visitService.getAllVisitsByGuardId(guardId);
         return visits;
     }
+
+    @GetMapping("/{visitId}/guard/{guardId}")
+    public VisitDTO getVisitByVisIdAndGuardId(@PathVariable Long visitId, @PathVariable Long guardId) {
+        VisitDTO visit = visitService.getVisitByIdAndGuardId(visitId, guardId);
+        return visit;
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +39,16 @@ public class VisitServiceImpl implements VisitService {
         return visits.stream()
                 .map(this::entityToDTO)
                 .collect(Collectors.toList());
+    }
+
+    //보호자+예약 번호로 예약 조회
+    @Override
+    public VisitDTO getVisitByIdAndGuardId(Long visitId, Long guardId) {
+        Visit visit = visitRepository.findByVisIdAndGuard_GuardId(visitId, guardId)
+                .orElseThrow(()->new RuntimeException("매칭되는 예약이 없습니다"));
+
+        return entityToDTO(visit);
+
     }
 
 
