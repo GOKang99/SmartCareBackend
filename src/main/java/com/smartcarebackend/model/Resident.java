@@ -23,7 +23,7 @@ public class Resident {
     private String resName; // 이름
 
     @Column(name = "res_genter", length = 10)
-    private String resGenter; // 성별
+    private String resGender; // 성별
 
     @Column(name = "res_birth")
     private LocalDate resBirth; // 생년월일
