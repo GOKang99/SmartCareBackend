@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -34,4 +36,7 @@ public class Guard {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "res_id", referencedColumnName = "resId",nullable = true)
     private Resident resident;
+
+    @OneToMany(mappedBy = "guard", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Visit> visits;
 }

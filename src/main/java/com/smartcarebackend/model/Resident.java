@@ -98,6 +98,4 @@ public class Resident {
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Meal> meals;
 
-    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Visit> visits;
 }

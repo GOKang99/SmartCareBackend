@@ -51,8 +51,8 @@ public class Visit {
     private String remark; // 비고
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "res_id", referencedColumnName = "resId")
-    private Resident resident;
+    @JoinColumn(name = "guard_id", referencedColumnName = "guardId")
+    private Guard guard;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "giver_id", referencedColumnName = "giverId")
