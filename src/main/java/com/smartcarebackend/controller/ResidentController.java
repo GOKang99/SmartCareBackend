@@ -6,6 +6,8 @@ import com.smartcarebackend.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/resident")
 public class ResidentController {
@@ -16,23 +18,25 @@ public class ResidentController {
     // 입소자 등록 API
     @PostMapping("/create")
     public Resident create(ResidentDTO residentDTO) {
-
-        System.out.println("디티오: " + residentDTO);
         return residentService.createResident(residentDTO);
-
     }
 
     // 입소자 수정 API
     @PutMapping("/{resId}")
     public Resident update(ResidentDTO residentDTO, @PathVariable Long resId) {
-        System.out.println("변경된 내용: " + residentDTO);
         return residentService.updateResident(resId, residentDTO);
     }
 
     // 입소자 삭제 API
     @DeleteMapping("/{resId}")
     public void delete(@PathVariable Long resId) {
-        System.out.println("삭제" + resId);
         residentService.deleteResident(resId);
+    }
+
+    // 입소자 정보 API
+    @GetMapping
+    public List<Resident> getAll(ResidentDTO residentDTO) {
+        System.out.println("모든유저" + residentDTO);
+        return residentService.getAllResidents(residentDTO);
     }
 }

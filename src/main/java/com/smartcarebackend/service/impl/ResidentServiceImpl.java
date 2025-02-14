@@ -104,13 +104,32 @@ public class ResidentServiceImpl implements ResidentService {
             resident.setResImageAddress(resFileName);
         }
         resident.setGiver(resident.getGiver()); // 요양보호사 ID
+
         if(residentDTO.getResName() != null){
             resident.setResName(residentDTO.getResName()); // 이름
         }
-        resident.setResGender(residentDTO.getResGender()); // 성별
-        resident.setResBirth(residentDTO.getResBirth());; // 생년월일
-        resident.setResPhone(residentDTO.getResPhone()); // 전화번호
-        resident.setResGrade(residentDTO.getResGrade()); // 등급
+
+        if(residentDTO.getResGender() != null){
+            resident.setResGender(residentDTO.getResGender());
+        }
+
+        if(residentDTO.getResBirth() != null){
+            resident.setResBirth(residentDTO.getResBirth());
+        }
+
+        if(residentDTO.getResPhone() != null){
+            resident.setResPhone(residentDTO.getResPhone());
+        }
+
+        if(residentDTO.getResGrade() != null){
+            resident.setResGrade(residentDTO.getResGrade());
+        }
+
+//        resident.setResGender(residentDTO.getResGender()); // 성별
+//        resident.setResBirth(residentDTO.getResBirth());; // 생년월일
+//        resident.setResPhone(residentDTO.getResPhone()); // 전화번호
+//        resident.setResGrade(residentDTO.getResGrade()); // 등급
+
         resident.setDementiaYn(residentDTO.isDementiaYn()); // 치매 유무
         resident.setFallYn(residentDTO.isFallYn()); // 낙상 위험
         resident.setBedsoreYn(residentDTO.isBedsoreYn()); // 욕창 위험
@@ -126,6 +145,7 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setResCareGroup(residentDTO.getResCareGroup()); // 케어그룹
         resident.setResFoodType(residentDTO.getResFoodType()); // 식사종류
         resident.setResFunctionDis(residentDTO.getResFunctionDis()); // 기능장애
+
         return residentRepository.save(resident);
     }
 
@@ -149,6 +169,7 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public List<Resident> getAllResidents(ResidentDTO residentDTO) {
-        return List.of();
+        List<Resident> residents = residentRepository.findAll();
+        return residents;
     }
 }
