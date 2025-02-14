@@ -1,7 +1,9 @@
 package com.smartcarebackend.service.impl;
 
 import com.smartcarebackend.dto.ResidentDTO;
+import com.smartcarebackend.model.Giver;
 import com.smartcarebackend.model.Resident;
+import com.smartcarebackend.repositories.GiverRepository;
 import com.smartcarebackend.repositories.ResidentRepository;
 import com.smartcarebackend.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ import java.util.List;
 public class ResidentServiceImpl implements ResidentService {
     @Autowired
     private ResidentRepository residentRepository;
+
+    @Autowired
+    private GiverRepository giverRepository;
 
     @Autowired
     public ResidentServiceImpl(ResidentRepository residentRepository) {
@@ -51,8 +56,13 @@ public class ResidentServiceImpl implements ResidentService {
             System.out.println("Error: " + e.getMessage());
         }
 
+        // Giver 객체를 giverId로 찾아서 할당
+        Giver giver = giverRepository.findById(residentDTO.getGiverId())
+                .orElseThrow(() -> new IllegalArgumentException("Giver not found for ID: " + residentDTO.getGiverId()));
+
+
         Resident resident = new Resident();
-        resident.setGiver(resident.getGiver()); // 요양보호사 ID
+        resident.setGiver(giver); // 요양보호사 ID
         resident.setResName(residentDTO.getResName()); // 이름
         resident.setResGender(residentDTO.getResGender()); // 성별
         resident.setResBirth(residentDTO.getResBirth());; // 생년월일

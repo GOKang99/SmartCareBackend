@@ -36,7 +36,6 @@ public class ResidentController {
     // 입소자 정보 API
     @GetMapping
     public List<Resident> getAll(ResidentDTO residentDTO) {
-        System.out.println("모든유저" + residentDTO);
         return residentService.getAllResidents(residentDTO);
     }
 }
