@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/visit")
+@RequestMapping("/api/visit")
 public class VisitController {
 
     @Autowired
@@ -41,13 +42,7 @@ public class VisitController {
 
     }
 
-//    //자신의 guardId만 수정 가능
-//    @PutMapping("/{guardId}/update/{visitId}")
-//    public VisitDTO updateVisit(@PathVariable Long guardId, @PathVariable Long visitId, @RequestBody VisitDTO visitDTO) {
-//        VisitDTO updateVisit = visitService.updateVisit(guardId,visitId,visitDTO);
-//        return updateVisit;
-//    }
-
+    //수정하기
     @PutMapping("/update/{visitId}")
     public VisitDTO updateVisit(@PathVariable Long visitId, @RequestBody VisitDTO visitDTO) {
         VisitDTO updateVisit = visitService.updateVisit(visitId,visitDTO);
