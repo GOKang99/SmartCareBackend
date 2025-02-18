@@ -41,10 +41,7 @@ public class UserServiceImpl implements UserService {
                 Resident resident = guard.getResident();
                 dto.setResidentId(resident.getResId());
                 dto.setResidentName(resident.getResName());
-                // 사진이 있으면 표시 없으면 기본
-                String image = (resident.getResImageAddress() == null || resident.getResImageAddress().isEmpty())
-                        ? "https://via.placeholder.com/150" : resident.getResImageAddress();
-                dto.setResidentImage(image);
+                dto.setResidentImage(resident.getResImageAddress());
             }
         } else if ("ROLE_ADMIN".equals(roleName)) {
             // 관리자는 환자 정보 세팅 x
