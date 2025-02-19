@@ -18,4 +18,7 @@ public interface ResidentService {
 
     // 모든 입소자 조회
     List<Resident> getAllResidents(ResidentDTO residentDTO);
+
+    // 특정 입소자 상세 정보 조회
+    Resident getResidentById(Long resId);
 }

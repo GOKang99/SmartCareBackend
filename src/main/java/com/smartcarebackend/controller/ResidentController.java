@@ -38,4 +38,10 @@ public class ResidentController {
     public List<Resident> getAll(ResidentDTO residentDTO) {
         return residentService.getAllResidents(residentDTO);
     }
+
+        // 입소자 상세 정보 API
+        @GetMapping("/{resId}")
+        public Resident getResidentById(@PathVariable Long resId) {
+            return residentService.getResidentById(resId);
+        }
 }

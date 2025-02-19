@@ -185,4 +185,10 @@ public class ResidentServiceImpl implements ResidentService {
         List<Resident> residents = residentRepository.findAll();
         return residents;
     }
+
+    @Override
+    public Resident getResidentById(Long resId) {
+        return residentRepository.findByResId(resId)
+                .orElseThrow(()->new RuntimeException("입소자 정보가 없습니다." + resId));
+    }
 }

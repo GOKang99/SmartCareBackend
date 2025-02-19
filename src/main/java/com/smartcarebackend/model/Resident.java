@@ -1,6 +1,7 @@
 package com.smartcarebackend.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -84,18 +85,23 @@ public class Resident {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "giver_id", referencedColumnName = "giverId")
+    @JsonBackReference
     private Giver giver;
 
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Guard> guards;
 
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Cist> cists;
 
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Activity> acts;
 
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Meal> meals;
 
 }
