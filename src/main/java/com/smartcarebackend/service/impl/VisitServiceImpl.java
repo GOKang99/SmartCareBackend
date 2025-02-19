@@ -44,8 +44,8 @@ public class VisitServiceImpl implements VisitService {
 
     //보호자+예약 번호로 예약 조회
     @Override
-    public VisitDTO getVisitByIdAndGuardId(Long visitId, Long guardId) {
-        Visit visit = visitRepository.findByVisIdAndGuard_GuardId(visitId, guardId)
+    public VisitDTO getVisitByIdAndGuardId(Long visId, Long guardId) {
+        Visit visit = visitRepository.findByVisIdAndGuard_GuardId(visId, guardId)
                 .orElseThrow(()->new RuntimeException("매칭되는 예약이 없습니다"));
 
         return entityToDTO(visit);
@@ -87,7 +87,13 @@ public class VisitServiceImpl implements VisitService {
         return entityToDTO(updatedVisit);
     }
 
+    @Override
+    public void deleteVisit(Long visitId) {
+           Visit visit =  visitRepository.findById(visitId)
+                   .orElseThrow(()->new RuntimeException(visitId+"의 예약을 찾을수 없습니다."));
 
+        visitRepository.delete(visit);
+    }
 
 
     // DTO -> Entity

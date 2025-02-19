@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/visit")
 public class VisitController {
@@ -28,9 +28,9 @@ public class VisitController {
         return visits;
     }
     //보호자 아이디+예약번호로 예약 조회
-    @GetMapping("/{visitId}/guard/{guardId}")
-    public VisitDTO getVisitByVisIdAndGuardId(@PathVariable Long visitId, @PathVariable Long guardId) {
-        VisitDTO visit = visitService.getVisitByIdAndGuardId(visitId, guardId);
+    @GetMapping("/{visId}/guard/{guardId}")
+    public VisitDTO getVisitByVisIdAndGuardId(@PathVariable Long visId, @PathVariable Long guardId) {
+        VisitDTO visit = visitService.getVisitByIdAndGuardId(visId, guardId);
         return visit;
     }
 
@@ -48,4 +48,10 @@ public class VisitController {
         VisitDTO updateVisit = visitService.updateVisit(visitId,visitDTO);
         return updateVisit;
     }
+
+    @DeleteMapping("/delete/{visitId}")
+    public void deleteVisit(@PathVariable Long visitId) {
+        visitService.deleteVisit(visitId);
+    }
+
 }
