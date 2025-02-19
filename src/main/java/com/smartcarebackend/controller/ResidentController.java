@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/resident")
 public class ResidentController {
@@ -17,8 +17,8 @@ public class ResidentController {
 
     // 입소자 등록 API
     @PostMapping("/create")
-    public Resident create(ResidentDTO residentDTO) {
-        return residentService.createResident(residentDTO);
+    public Resident create(Long giverId, ResidentDTO residentDTO) {
+        return residentService.createResident(giverId, residentDTO);
     }
 
     // 입소자 수정 API

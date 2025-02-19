@@ -8,7 +8,7 @@ import java.util.List;
 public interface ResidentService {
 
     // 입소자 등록
-    Resident createResident(ResidentDTO residentDTO);
+    Resident createResident(Long giverId, ResidentDTO residentDTO);
 
     // 입소자 수정
     Resident updateResident(Long redId, ResidentDTO residentDTO);

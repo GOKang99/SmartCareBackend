@@ -36,10 +36,13 @@ public class ResidentServiceImpl implements ResidentService {
 
     // 입소자 정보 등록
     @Override
-    public Resident createResident(ResidentDTO residentDTO) {
+    public Resident createResident(Long giverId, ResidentDTO residentDTO) {
+
         MultipartFile resImages = residentDTO.getResImages();
+
         Date createDate = new Date();
         String resFileName = createDate.getTime() + "_" + resImages.getOriginalFilename();
+
 
         try {
             String uploadImages = "public/images";
@@ -57,7 +60,7 @@ public class ResidentServiceImpl implements ResidentService {
         }
 
         // Giver 객체를 giverId로 찾아서 할당
-        Giver giver = giverRepository.findById(residentDTO.getGiverId())
+        Giver giver = giverRepository.findById(giverId)
                 .orElseThrow(() -> new IllegalArgumentException("Giver not found for ID: " + residentDTO.getGiverId()));
 
 
