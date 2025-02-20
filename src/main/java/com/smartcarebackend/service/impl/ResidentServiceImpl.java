@@ -45,7 +45,7 @@ public class ResidentServiceImpl implements ResidentService {
 
 
         try {
-            String uploadImages = "public/images";
+            String uploadImages = "public/images/";
             Path uploadImagesPath = Paths.get(uploadImages);
 
             if (!Files.exists(uploadImagesPath)) {
@@ -96,7 +96,7 @@ public class ResidentServiceImpl implements ResidentService {
     public Resident updateResident(Long redId, ResidentDTO residentDTO) {
         Resident resident = residentRepository.findById(redId).get();
         if (residentDTO.getResImages() != null){
-            String uploadImages = "public/images";
+            String uploadImages = "public/images/";
             Path oldImagePath = Paths.get(uploadImages + resident.getResImageAddress());
             try {
                 Files.delete(oldImagePath);

@@ -4,8 +4,12 @@ import com.smartcarebackend.dto.ResidentDTO;
 import com.smartcarebackend.model.Resident;
 import com.smartcarebackend.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
@@ -39,9 +43,10 @@ public class ResidentController {
         return residentService.getAllResidents(residentDTO);
     }
 
-        // 입소자 상세 정보 API
-        @GetMapping("/{resId}")
-        public Resident getResidentById(@PathVariable Long resId) {
-            return residentService.getResidentById(resId);
-        }
+    // 입소자 상세 정보 API
+    @GetMapping("/{resId}")
+    public Resident getResidentById(@PathVariable Long resId) {
+        return residentService.getResidentById(resId);
+    }
+
 }
