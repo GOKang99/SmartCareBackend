@@ -23,7 +23,8 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUserById(Long userId){
         // 유저 조회
         User user = userRepository.findById(userId).orElseThrow(()
-                -> new RuntimeException("유저를 찾을 수 없음"));
+        -> new RuntimeException("유저를 찾을 수 없음"));
+
 
         // 유저 정보 (ID, 이름, 이메일, 전화번호, 관계, 권한명 등)
         UserDTO dto = new UserDTO();
@@ -41,10 +42,8 @@ public class UserServiceImpl implements UserService {
                 Resident resident = guard.getResident();
                 dto.setResidentId(resident.getResId());
                 dto.setResidentName(resident.getResName());
-                // 사진이 있으면 표시 없으면 기본
-                String image = (resident.getResImageAddress() == null || resident.getResImageAddress().isEmpty())
-                        ? "https://via.placeholder.com/150" : resident.getResImageAddress();
-                dto.setResidentImage(image);
+                dto.setResidentImage(resident.getResImageAddress());
+
             }
         } else if ("ROLE_ADMIN".equals(roleName)) {
             // 관리자는 환자 정보 세팅 x
