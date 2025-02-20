@@ -1,9 +1,6 @@
 package com.smartcarebackend.dto;
 
 import com.smartcarebackend.model.Role;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +18,11 @@ public class UserDTO {
     private String phone;  // 연락처
     private boolean agree;  // 약관 동의 여부
     private String roleName; // 역할(Role) 이름
+
+    private Long residentId; //새 필드
+    private String residentName; //새 필드
+    private String residentImage; //새 필드
+
     private List<ResidentDTO> residents; // 입소자 정보 (연결된 입소자 리스트)
     private Role role;
 
