@@ -1,9 +1,12 @@
 package com.smartcarebackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -31,12 +34,18 @@ public class Guard {
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "userId")
+    @JsonManagedReference
+    @ToString.Exclude
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "res_id", referencedColumnName = "resId",nullable = true)
+    @JsonBackReference
+    @ToString.Exclude
     private Resident resident;
 
     @OneToMany(mappedBy = "guard", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
+    @ToString.Exclude
     private List<Visit> visits;
 }

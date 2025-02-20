@@ -2,6 +2,7 @@ package com.smartcarebackend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
@@ -49,10 +50,12 @@ public class Cist {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "giver_id", referencedColumnName = "giverId")
+    @ToString.Exclude
     private Giver giver;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "res_id", referencedColumnName = "resId")
+    @ToString.Exclude
     private Resident resident;
 
     // 총점을 계산하고 판정을 업데이트하는 메서드
