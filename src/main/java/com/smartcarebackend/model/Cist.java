@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,7 +28,7 @@ public class Cist {
     @Column(name = "CIS_ATTENTION", nullable = false)
     private Long attention; //주의력 점수:3
 
-    @Column(name = "CIS_SPATIAL_EMPORAL", nullable = false)
+    @Column(name = "CIS_SPATIAL_TEMPORAL", nullable = false)
     private Long spatialTemporal; //시공간가능 점수:2
 
     @Column(name = "CIS_EXECUTIVE_FUNCTION", nullable = false)
@@ -57,21 +56,5 @@ public class Cist {
     @JoinColumn(name = "res_id", referencedColumnName = "resId")
     @ToString.Exclude
     private Resident resident;
-
-    // 총점을 계산하고 판정을 업데이트하는 메서드
-//    public void calculateTotalAndGrade() {
-//        // 총점 계산
-//        this.totalScore = this.orientation + this.attention + this.spatialTemporal
-//                            + this.executiveFunction + this.memory + this.language;
-//
-//        // 판정 기준에 맞는 판정 부여
-//        if (this.totalScore <= 10) {
-//            this.cisGrade = "심각";
-//        } else if (this.totalScore <= 24) {
-//            this.cisGrade = "보통";
-//        } else {
-//            this.cisGrade = "정상";
-//        }
-//    }
 
 }
