@@ -11,13 +11,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResidentDTO {
-    private Long redId;
-
-    private Long giverId;
+    private Long giverId; // 요양보호사 Id
 
     private String resName; // 이름
 
-    private String resGenter; // 성별
+    private String resGender; // 성별
 
     private LocalDate resBirth; // 생년월일
 
