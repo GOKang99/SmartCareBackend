@@ -1,6 +1,12 @@
 package com.smartcarebackend.security.jwt;
 
 
+import com.smartcarebackend.model.Giver;
+import com.smartcarebackend.model.Guard;
+import com.smartcarebackend.model.User;
+import com.smartcarebackend.repositories.GiverRepository;
+import com.smartcarebackend.repositories.GuardRepository;
+import com.smartcarebackend.repositories.UserRepository;
 import com.smartcarebackend.security.service.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -18,12 +24,14 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class); //로그 출력객체
+    private final GiverRepository giverRepository;
+    private final GuardRepository guardRepository;
+    private final UserRepository userRepository;
+
     //jwt 비밀키(설정에 있음)
     @Value("${spring.app.jwtSecret}")
     private String jwtSecret;
@@ -31,6 +39,12 @@ public class JwtUtils {
     //jwt 유효기간(설정에 있음)
     @Value("${spring.app.jwtExpirationMs}")
     private int jwtExpirationMs;
+
+    public JwtUtils(GiverRepository giverRepository, GuardRepository guardRepository, UserRepository userRepository) {
+        this.giverRepository = giverRepository;
+        this.guardRepository = guardRepository;
+        this.userRepository = userRepository;
+    }
 
     //jwt 토큰을 헤더에서 가져온다
     public String getJwtFromHeader(HttpServletRequest request) {
@@ -60,14 +74,44 @@ public class JwtUtils {
                 .map(roles -> roles.getAuthority().replace("ROLE_", ""))
                 .findFirst().orElse(""); //권한리스트에서 첫번째 권한 가져오기
         Long userId = userDetailsImpl.getId(); //유저id 가져오기
-        return Jwts.builder()
-                .subject(username)
-                .claim("userId", userId)
-                .claim("role", role)
-                .issuedAt(new Date())
-                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(key())
-                .compact();
+        //유저id로 guard엔티티 가져오기
+
+        if (role.equals("ADMIN")) {
+            User findUser = userRepository.findById(userId).get();
+            Giver findGiver=findUser.getGiver();
+            Long findGiverId=findGiver.getGiverId();
+            return Jwts.builder()
+                    .subject(username)
+                    .claim("userId", userId)
+                    .claim("partId", findGiverId)
+                    .claim("role", role)
+                    .issuedAt(new Date())
+                    .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                    .signWith(key())
+                    .compact();
+        }
+        else{
+            User findUser = userRepository.findById(userId).get();
+            Guard findGuard = findUser.getGuard();
+            Long findGuardId=findGuard.getGuardId();
+            return Jwts.builder()
+                    .subject(username)
+                    .claim("userId", userId)
+                    .claim("partId", findGuardId)
+                    .claim("role", role)
+                    .issuedAt(new Date())
+                    .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                    .signWith(key())
+                    .compact();
+        }
+//        return Jwts.builder()
+//                .subject(username)
+//                .claim("userId", userId)
+//                .claim("role", role)
+//                .issuedAt(new Date())
+//                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+//                .signWith(key())
+//                .compact();
     }
 
     //비밀키 값
