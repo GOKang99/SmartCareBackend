@@ -33,6 +33,17 @@ public class ResidentServiceImpl implements ResidentService {
         this.residentRepository = residentRepository;
     }
 
+    // systemResCode 자동 생성 메서드
+    private String generateSystemResCode() {
+        // 예: "20250001" 형태로 생성
+        Long lastResidentId = residentRepository.findTopByOrderByResIdDesc()
+                .map(Resident::getResId)
+                .orElse(0L);
+
+        String prefix = "2025"; // 특정 연도나 규칙을 넣을 수 있음
+        String newCode = prefix + String.format("%04d", lastResidentId + 1); // 예시: "20250001"
+        return newCode;
+    }
 
     // 입소자 정보 등록
     @Override
@@ -63,6 +74,7 @@ public class ResidentServiceImpl implements ResidentService {
         Giver giver = giverRepository.findById(giverId)
                 .orElseThrow(() -> new IllegalArgumentException("Giver not found for ID: " + residentDTO.getGiverId()));
 
+        String generatedCode = generateSystemResCode();
 
         Resident resident = new Resident();
         resident.setGiver(giver); // 요양보호사 ID
@@ -80,7 +92,7 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setResEnterDate(residentDTO.getResEnterDate()); // 입소일
         resident.setResExitDate(residentDTO.getResExitDate()); // 퇴소일
         resident.setResAddress(residentDTO.getResAddress()); // 주소
-        resident.setSystemResCode(residentDTO.getSystemResCode()); // 요양시스템 입소자 코드
+        resident.setSystemResCode(generatedCode);
         resident.setResSchoolGrade(residentDTO.getResSchoolGrade()); // 최종학력
         resident.setResLongTermCareNo(residentDTO.getResLongTermCareNo()); // 장기요양인정번호
         resident.setResCareGroup(residentDTO.getResCareGroup()); // 케어그룹

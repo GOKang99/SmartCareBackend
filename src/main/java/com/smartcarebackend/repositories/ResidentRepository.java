@@ -12,4 +12,5 @@ public interface ResidentRepository extends JpaRepository<Resident, Long> {
     Optional<Resident> findByResId(Long resId);
 
 
+    Optional<Resident> findTopByOrderByResIdDesc();
 }
