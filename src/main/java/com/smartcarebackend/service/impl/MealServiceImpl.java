@@ -145,13 +145,13 @@ public class MealServiceImpl implements MealService {
         meal.setAftSnackTime(mealDTO.getAftSnackTime());
         meal.setRemark(mealDTO.getRemark());
 
-        Resident resident = residentRepository.findById(mealDTO.getResMealId())
-                .orElseThrow(() -> new IllegalArgumentException("Resident not found"));
-        meal.setResident(resident);
-
-        Giver giver = giverRepository.findById(mealDTO.getGiver())
-                .orElseThrow(() -> new IllegalArgumentException("Giver not found"));
-        meal.setGiver(giver);
+//        Resident resident = residentRepository.findById(mealDTO.getResMealId())
+//                .orElseThrow(() -> new IllegalArgumentException("Resident not found"));
+//        meal.setResident(resident);
+//
+//        Giver giver = giverRepository.findById(mealDTO.getGiver())
+//                .orElseThrow(() -> new IllegalArgumentException("Giver not found"));
+//        meal.setGiver(giver);
 
         meal = mealRepository.save(meal);
         mealDTO.setMedId(meal.getMedId());

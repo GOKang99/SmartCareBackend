@@ -51,9 +51,13 @@ public class MealController {
     // 식사 일지 수정 (관리자만)
     @PutMapping("/admin/{medId}")
     public ResponseEntity<MealDTO> updateMealForAdmin(@PathVariable Long medId, @RequestBody MealDTO mealDTO) {
+        System.out.println("========================================");
+        //System.out.println(medId);
+        //System.out.println(mealDTO);
         // 관리자가 특정 식사 일지를 수정하는 서비스 호출
         MealDTO updatedMeal = mealService.updateMealForAdmin(medId, mealDTO);
         return ResponseEntity.ok(updatedMeal); // 수정된 데이터를 200 OK와 함께 반환
+
     }
 
     // 식사 일지 삭제 (관리자만)
