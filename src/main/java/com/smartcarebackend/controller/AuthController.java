@@ -1,8 +1,8 @@
 package com.smartcarebackend.controller;
 
-import com.smartcarebackend.model.AppRole;
-import com.smartcarebackend.model.Role;
-import com.smartcarebackend.model.User;
+import com.smartcarebackend.model.*;
+import com.smartcarebackend.repositories.GiverRepository;
+import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.repositories.RoleRepository;
 import com.smartcarebackend.repositories.UserRepository;
 import com.smartcarebackend.security.jwt.JwtUtils;
@@ -54,7 +54,12 @@ public class AuthController {
 
     @Autowired
     UserService userService;
-    
+    @Autowired
+    GiverRepository giverRepository;
+    @Autowired
+    GuardRepository guardRepository;
+
+
     //로그인(시큐리티에서는 jwt 토큰을 발행하지 않으므로 로그인 컨트롤러를 구현해준다)
     @PostMapping("public/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest){
@@ -109,6 +114,7 @@ public class AuthController {
     //가입 signup
     @PostMapping("/public/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest){
+        System.out.println("싸인"+signUpRequest);
         //입력한 username이 이미 존재하는가
         if(userRepository.existsByUsername(signUpRequest.getUsername())){
             return ResponseEntity.badRequest().body(new MessageResponse("이미 존재하는 계정입니다"));
@@ -119,16 +125,18 @@ public class AuthController {
         }
 
         //새로운 계정 생성
-        User user=new User(
-                signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encodeer.encode(signUpRequest.getPassword())
-        );
+        User user=new User();
+        user.setUsername(signUpRequest.getUsername());
+        user.setPassword(encodeer.encode(signUpRequest.getPassword()));
+        user.setEmail(signUpRequest.getEmail());
+        user.setSsn(signUpRequest.getSsn());
+        user.setPhone(signUpRequest.getPhone());
 
         //signUpRequest(DTO)에서 Role 가져오기
         Set<String> strRoles = signUpRequest.getRole();
         //빈 Role객체 생성
         Role role;
+
 
         //DTO에서 가져온 Role이 비어있을 때
         if(strRoles == null || strRoles.isEmpty()){
@@ -153,9 +161,20 @@ public class AuthController {
         }
         //유저객체에 권한 저장
         user.setRole(role);
-        //DB에 유저객체 저장
-        userRepository.save(user);
-
+        //DB에 유저엔티티 저장 및 저장된 유저엔티티 반환
+        User addUser=userRepository.save(user);
+        //첫번째 권한 추출
+        String saveRole=strRoles.iterator().next();
+        if(saveRole.equals("admin")){
+            Giver giver=new Giver();
+            giver.setUser(addUser);
+            giverRepository.save(giver);
+        }else{
+            Guard guard=new Guard();
+            guard.setUser(addUser);
+            guard.setRelation(signUpRequest.getRelation());
+            guardRepository.save(guard);
+        }
         //200(성공)상태와 메시지를 응답
         return ResponseEntity.ok(new MessageResponse("회원가입이 완료되었습니다"));
     }
