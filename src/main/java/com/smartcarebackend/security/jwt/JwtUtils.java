@@ -111,7 +111,7 @@ public class JwtUtils {
 //                .issuedAt(new Date())
 //                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
 //                .signWith(key())
-//                .compact();
+//                .compact(); 주석 수정
     }
 
     //비밀키 값
