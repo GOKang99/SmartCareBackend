@@ -2,8 +2,10 @@ package com.smartcarebackend.service.impl;
 
 import com.smartcarebackend.dto.ResidentDTO;
 import com.smartcarebackend.model.Giver;
+import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Resident;
 import com.smartcarebackend.repositories.GiverRepository;
+import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.repositories.ResidentRepository;
 import com.smartcarebackend.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Autowired
     private GiverRepository giverRepository;
+
+    @Autowired
+    private GuardRepository guardRepository;
 
     @Autowired
     public ResidentServiceImpl(ResidentRepository residentRepository) {
@@ -180,5 +185,14 @@ public class ResidentServiceImpl implements ResidentService {
     public Resident getResidentById(Long resId) {
         return residentRepository.findByResId(resId)
                 .orElseThrow(()->new RuntimeException("입소자 정보가 없습니다." + resId));
+    }
+
+    @Override
+    public Guard createResidentGuard(String ssn) {
+        Guard guard = guardRepository.findBySsn(ssn)
+                .orElseThrow(()->new RuntimeException("Guard not found with ssn: " + ssn));
+        Resident resId = residentRepository.findByResId(18L).get();
+        guard.setResident(resId);
+        return guardRepository.save(guard);
     }
 }

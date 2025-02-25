@@ -1,6 +1,7 @@
 package com.smartcarebackend.service;
 
 import com.smartcarebackend.dto.ResidentDTO;
+import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Resident;
 
 import java.util.List;
@@ -21,4 +22,7 @@ public interface ResidentService {
 
     // 특정 입소자 상세 정보 조회
     Resident getResidentById(Long resId);
+
+    // 보호자 등록
+    Guard createResidentGuard(String ssn);
 }
