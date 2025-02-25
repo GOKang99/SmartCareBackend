@@ -74,7 +74,6 @@ public class ResidentServiceImpl implements ResidentService {
         Giver giver = giverRepository.findById(giverId)
                 .orElseThrow(() -> new IllegalArgumentException("Giver not found for ID: " + residentDTO.getGiverId()));
 
-        String generatedCode = generateSystemResCode();
 
         Resident resident = new Resident();
         resident.setGiver(giver); // 요양보호사 ID
@@ -92,6 +91,7 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setResEnterDate(residentDTO.getResEnterDate()); // 입소일
         resident.setResExitDate(residentDTO.getResExitDate()); // 퇴소일
         resident.setResAddress(residentDTO.getResAddress()); // 주소
+        String generatedCode = generateSystemResCode();
         resident.setSystemResCode(generatedCode);
         resident.setResSchoolGrade(residentDTO.getResSchoolGrade()); // 최종학력
         resident.setResLongTermCareNo(residentDTO.getResLongTermCareNo()); // 장기요양인정번호
@@ -143,7 +143,6 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setResEnterDate(residentDTO.getResEnterDate()); // 입소일
         resident.setResExitDate(residentDTO.getResExitDate()); // 퇴소일
         resident.setResAddress(residentDTO.getResAddress()); // 주소
-        resident.setSystemResCode(residentDTO.getSystemResCode()); // 요양시스템 입소자 코드
         resident.setResSchoolGrade(residentDTO.getResSchoolGrade()); // 최종학력
         resident.setResLongTermCareNo(residentDTO.getResLongTermCareNo()); // 장기요양인정번호
         resident.setResCareGroup(residentDTO.getResCareGroup()); // 케어그룹
