@@ -1,11 +1,12 @@
 package com.smartcarebackend.controller;
 
-import com.smartcarebackend.model.AppRole;
-import com.smartcarebackend.model.Role;
-import com.smartcarebackend.model.User;
+import com.smartcarebackend.model.*;
+import com.smartcarebackend.repositories.GiverRepository;
+import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.repositories.RoleRepository;
 import com.smartcarebackend.repositories.UserRepository;
 import com.smartcarebackend.security.jwt.JwtUtils;
+import com.smartcarebackend.security.request.ChangePwdRequest;
 import com.smartcarebackend.security.request.LoginRequest;
 import com.smartcarebackend.security.request.SignupRequest;
 import com.smartcarebackend.security.response.LoginResponse;
@@ -23,14 +24,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -54,7 +53,17 @@ public class AuthController {
 
     @Autowired
     UserService userService;
-    
+
+    @Autowired
+    GiverRepository giverRepository;
+
+    @Autowired
+    GuardRepository guardRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+
     //로그인(시큐리티에서는 jwt 토큰을 발행하지 않으므로 로그인 컨트롤러를 구현해준다)
     @PostMapping("public/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest){
@@ -109,6 +118,7 @@ public class AuthController {
     //가입 signup
     @PostMapping("/public/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest){
+        System.out.println("싸인"+signUpRequest);
         //입력한 username이 이미 존재하는가
         if(userRepository.existsByUsername(signUpRequest.getUsername())){
             return ResponseEntity.badRequest().body(new MessageResponse("이미 존재하는 계정입니다"));
@@ -119,16 +129,18 @@ public class AuthController {
         }
 
         //새로운 계정 생성
-        User user=new User(
-                signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encodeer.encode(signUpRequest.getPassword())
-        );
+        User user=new User();
+        user.setUsername(signUpRequest.getUsername());
+        user.setPassword(encodeer.encode(signUpRequest.getPassword()));
+        user.setEmail(signUpRequest.getEmail());
+        user.setSsn(signUpRequest.getSsn());
+        user.setPhone(signUpRequest.getPhone());
 
         //signUpRequest(DTO)에서 Role 가져오기
         Set<String> strRoles = signUpRequest.getRole();
         //빈 Role객체 생성
         Role role;
+
 
         //DTO에서 가져온 Role이 비어있을 때
         if(strRoles == null || strRoles.isEmpty()){
@@ -153,9 +165,20 @@ public class AuthController {
         }
         //유저객체에 권한 저장
         user.setRole(role);
-        //DB에 유저객체 저장
-        userRepository.save(user);
-
+        //DB에 유저엔티티 저장 및 저장된 유저엔티티 반환
+        User addUser=userRepository.save(user);
+        //첫번째 권한 추출
+        String saveRole=strRoles.iterator().next();
+        if(saveRole.equals("admin")){
+            Giver giver=new Giver();
+            giver.setUser(addUser);
+            giverRepository.save(giver);
+        }else{
+            Guard guard=new Guard();
+            guard.setUser(addUser);
+            guard.setRelation(signUpRequest.getRelation());
+            guardRepository.save(guard);
+        }
         //200(성공)상태와 메시지를 응답
         return ResponseEntity.ok(new MessageResponse("회원가입이 완료되었습니다"));
     }
@@ -185,5 +208,34 @@ public class AuthController {
     public String getUsername(Principal principal){
         //Principal은 현재 인증된 사용자에 대한 정보가 담겨있다
         return principal.getName() != null ? principal.getName() : "";
+    }
+
+    //비밀번호 변경
+    @PostMapping("/public/changepwd")
+    public String changePwd(@RequestBody ChangePwdRequest changePwdRequest){
+        System.out.println("유저아이디"+changePwdRequest.getUserId());
+        User user=userRepository.findById(changePwdRequest.getUserId()).get(); //비밀번호 변경을 요청한 유저의 엔티티
+        System.out.println("유저"+user);
+        String currentPassword=changePwdRequest.getCurrentPassword(); //현재 비밀번호
+        String newPassword=changePwdRequest.getNewPassword(); //새로운 비밀번호
+        String confirmPassword=changePwdRequest.getConfirmPassword(); //확인용 비밀번호
+
+        //입력한 비밀번호와 DB에 등록된 비밀번호가 일치하는지 확인
+        if(!passwordEncoder.matches(currentPassword, user.getPassword())){
+            return "wrong password";
+        }
+        user.setPassword(passwordEncoder.encode(newPassword)); //유저엔티티에 새로운 비밀번호를 인코딩해서 set
+        userRepository.save(user); //새로운 비밀번호가 저장된 유저객체를 저장
+        return "success";
+    }
+
+    @PostMapping("/public/checkuser")
+    public ResponseEntity<String> checkUsername(@RequestBody SignupRequest signUpRequest){
+        Optional<User> user=userRepository.findByUsername(signUpRequest.getUsername());
+        if(user.isPresent()){
+            return ResponseEntity.status(400).body("이미 존재하는 유저네임입니다");
+        }
+        System.out.println(signUpRequest);
+        return ResponseEntity.ok("생성 가능한 유저네임입니다");
     }
 }

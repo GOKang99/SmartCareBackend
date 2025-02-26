@@ -23,11 +23,11 @@ public class Guard {
     @Column(length = 12)
     private String relation;  //환자와의 관계 (예: 부모, 자녀, 배우자 등)
 
-    @Column(length = 15)
-    private String phone;  //휴대폰 번호
+//    @Column(length = 15)
+//    private String phone;  //휴대폰 번호
 
-    @Column(length = 30)
-    private String ssn;  //주민등록번호 (중복 체크)
+//    @Column(length = 30)
+//    private String ssn;  //주민등록번호 (중복 체크)
 
     @Column(nullable = false)
     private boolean agree;  //약관동의 여부

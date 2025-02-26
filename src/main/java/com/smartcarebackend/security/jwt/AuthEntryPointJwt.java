@@ -1,6 +1,9 @@
 package com.smartcarebackend.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,6 +40,22 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
         body.put("message", "Unauthorized");
         body.put("message",authException.getMessage());
         body.put("path",request.getServletPath());
+
+        // AuthenticationException의 원인으로 JWT 관련 예외를 검사
+        Throwable cause = authException.getCause();
+        if (cause instanceof ExpiredJwtException) {
+            // ExpiredJwtException의 기본 메시지를 사용
+            body.put("message", cause.getMessage());
+        } else if (cause instanceof MalformedJwtException) {
+            // MalformedJwtException의 기본 메시지를 사용
+            body.put("message", cause.getMessage());
+        } else if (cause instanceof UnsupportedJwtException) {
+            // UnsupportedJwtException의 기본 메시지를 사용
+            body.put("message", cause.getMessage());
+        } else {
+            // 기타 예외에 대해서는 기본 메시지 사용
+            body.put("message", authException.getMessage());
+        }
 
         final ObjectMapper mapper = new ObjectMapper();
         //body객체를 JSON으로 변환하여 응답 본문에 포함시킨 뒤 클라이언트로 보냄

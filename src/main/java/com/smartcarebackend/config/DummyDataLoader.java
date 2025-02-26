@@ -55,8 +55,6 @@
 //            // 5) Guard 생성 (guardUser와 1:1 매핑)
 //            Guard guard = new Guard();
 //            guard.setRelation("자녀");
-//            guard.setPhone("010-5555-6666");
-//            guard.setSsn("456123-4561234");
 //            guard.setAgree(true);
 //            guard.setUser(guardUser);
 //            guardRepository.save(guard);
