@@ -191,12 +191,17 @@ public class ResidentServiceImpl implements ResidentService {
     public Guard createResidentGuard(GuardDTO guardDTO) {
         Guard guard = guardRepository.findBySsn(guardDTO.getSsn())
                 .orElseThrow(()->new RuntimeException("Guard not found with ssn: " + guardDTO.getSsn()));
-        Resident resId = residentRepository.findByResId(18L)
-                .orElseThrow(() -> new RuntimeException("Resident not found with resId: 18L"));;
-        guard.setResident(resId);
+//        Resident resId = residentRepository.findByResId(19L)
+//                .orElseThrow(() -> new RuntimeException("Resident not found with resId: 18L"));;
+        Long resId = guardDTO.getResId();
+        Resident resident = residentRepository.findById(resId)
+                .orElseThrow(()-> new RuntimeException("Resident not found with id: " + resId));
+        
+        guard.setResident(resident);
         guard.setSsn(guardDTO.getSsn());
         guard.setRelation(guardDTO.getRelation());
         guard.setPhone(guardDTO.getPhone());
+
         return guardRepository.save(guard);
     }
 }

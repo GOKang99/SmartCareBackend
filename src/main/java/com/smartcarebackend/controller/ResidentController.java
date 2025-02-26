@@ -51,7 +51,7 @@ public class ResidentController {
 
     @PutMapping("/guard")
     public ResponseEntity<Guard> registerGuard(@RequestBody GuardDTO guardDTO) {
-        System.out.println("보호자 정보" + guardDTO);
+        System.out.println("내용: " + guardDTO);
         try{
             Guard guard = residentService.createResidentGuard(guardDTO);
             return ResponseEntity.ok(guard);
