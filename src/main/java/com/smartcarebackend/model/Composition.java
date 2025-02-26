@@ -45,8 +45,8 @@ public class Composition {
 
     //참조하기
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guard_id", referencedColumnName = "guardId")
-    private Guard guard;
+    @JoinColumn(name = "res_id", referencedColumnName = "resId")
+    private Resident resident;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "giver_id", referencedColumnName = "giverId")
