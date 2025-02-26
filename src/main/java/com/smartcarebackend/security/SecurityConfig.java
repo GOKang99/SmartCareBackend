@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/auth/public/**").permitAll()
                 .requestMatchers("/api/notice/**").permitAll()
+                .requestMatchers("/images/**").permitAll()
                 .anyRequest().authenticated());
         http.exceptionHandling(exception
                 -> exception.authenticationEntryPoint(unauthorizedHandler));
