@@ -49,8 +49,4 @@ public class Guard {
     @ToString.Exclude
     private List<Visit> visits;
 
-    @OneToMany(mappedBy = "guard", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonBackReference
-    @ToString.Exclude
-    private List<Composition> compositions;
 }

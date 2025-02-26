@@ -110,4 +110,9 @@ public class Resident {
     @ToString.Exclude
     private List<Meal> meals;
 
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
+    @ToString.Exclude
+    private List<Composition> compositions;
+
 }
