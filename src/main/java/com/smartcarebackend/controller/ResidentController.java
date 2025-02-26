@@ -1,15 +1,15 @@
 package com.smartcarebackend.controller;
 
 import com.smartcarebackend.dto.ResidentDTO;
+import com.smartcarebackend.dto.GuardDTO;
+import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Resident;
 import com.smartcarebackend.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
@@ -49,4 +49,14 @@ public class ResidentController {
         return residentService.getResidentById(resId);
     }
 
+    @PutMapping("/guard")
+    public ResponseEntity<Guard> registerGuard(@RequestBody GuardDTO guardDTO) {
+        System.out.println("내용: " + guardDTO);
+        try{
+            Guard guard = residentService.createResidentGuard(guardDTO);
+            return ResponseEntity.ok(guard);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 }

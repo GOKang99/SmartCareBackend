@@ -1,14 +1,16 @@
 package com.smartcarebackend.service.impl;
 
 import com.smartcarebackend.dto.ResidentDTO;
+import com.smartcarebackend.dto.GuardDTO;
 import com.smartcarebackend.model.Giver;
+import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Resident;
 import com.smartcarebackend.repositories.GiverRepository;
+import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.repositories.ResidentRepository;
 import com.smartcarebackend.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -29,10 +31,24 @@ public class ResidentServiceImpl implements ResidentService {
     private GiverRepository giverRepository;
 
     @Autowired
+    private GuardRepository guardRepository;
+
+    @Autowired
     public ResidentServiceImpl(ResidentRepository residentRepository) {
         this.residentRepository = residentRepository;
     }
 
+    // systemResCode 자동 생성 메서드
+    private String generateSystemResCode() {
+        // 예: "20250001" 형태로 생성
+        Long lastResidentId = residentRepository.findTopByOrderByResIdDesc()
+                .map(Resident::getResId)
+                .orElse(0L);
+
+        String prefix = "2025"; // 특정 연도나 규칙을 넣을 수 있음
+        String newCode = prefix + String.format("%04d", lastResidentId + 1); // 예시: "20250001"
+        return newCode;
+    }
 
     // 입소자 정보 등록
     @Override
@@ -80,7 +96,8 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setResEnterDate(residentDTO.getResEnterDate()); // 입소일
         resident.setResExitDate(residentDTO.getResExitDate()); // 퇴소일
         resident.setResAddress(residentDTO.getResAddress()); // 주소
-        resident.setSystemResCode(residentDTO.getSystemResCode()); // 요양시스템 입소자 코드
+        String generatedCode = generateSystemResCode();
+        resident.setSystemResCode(generatedCode);
         resident.setResSchoolGrade(residentDTO.getResSchoolGrade()); // 최종학력
         resident.setResLongTermCareNo(residentDTO.getResLongTermCareNo()); // 장기요양인정번호
         resident.setResCareGroup(residentDTO.getResCareGroup()); // 케어그룹
@@ -116,33 +133,12 @@ public class ResidentServiceImpl implements ResidentService {
 
             resident.setResImageAddress(resFileName);
         }
-        resident.setGiver(resident.getGiver()); // 요양보호사 ID
 
-        if(residentDTO.getResName() != null){
-            resident.setResName(residentDTO.getResName()); // 이름
-        }
-
-        if(residentDTO.getResGender() != null){
-            resident.setResGender(residentDTO.getResGender());
-        }
-
-        if(residentDTO.getResBirth() != null){
-            resident.setResBirth(residentDTO.getResBirth());
-        }
-
-        if(residentDTO.getResPhone() != null){
-            resident.setResPhone(residentDTO.getResPhone());
-        }
-
-        if(residentDTO.getResGrade() != null){
-            resident.setResGrade(residentDTO.getResGrade());
-        }
-
-//        resident.setResGender(residentDTO.getResGender()); // 성별
-//        resident.setResBirth(residentDTO.getResBirth());; // 생년월일
-//        resident.setResPhone(residentDTO.getResPhone()); // 전화번호
-//        resident.setResGrade(residentDTO.getResGrade()); // 등급
-
+        resident.setResName(residentDTO.getResName()); // 이름
+        resident.setResGender(residentDTO.getResGender()); // 성별
+        resident.setResBirth(residentDTO.getResBirth());; // 생년월일
+        resident.setResPhone(residentDTO.getResPhone()); // 전화번호
+        resident.setResGrade(residentDTO.getResGrade()); // 등급
         resident.setDementiaYn(residentDTO.isDementiaYn()); // 치매 유무
         resident.setFallYn(residentDTO.isFallYn()); // 낙상 위험
         resident.setBedsoreYn(residentDTO.isBedsoreYn()); // 욕창 위험
@@ -152,7 +148,6 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setResEnterDate(residentDTO.getResEnterDate()); // 입소일
         resident.setResExitDate(residentDTO.getResExitDate()); // 퇴소일
         resident.setResAddress(residentDTO.getResAddress()); // 주소
-        resident.setSystemResCode(residentDTO.getSystemResCode()); // 요양시스템 입소자 코드
         resident.setResSchoolGrade(residentDTO.getResSchoolGrade()); // 최종학력
         resident.setResLongTermCareNo(residentDTO.getResLongTermCareNo()); // 장기요양인정번호
         resident.setResCareGroup(residentDTO.getResCareGroup()); // 케어그룹
@@ -190,5 +185,23 @@ public class ResidentServiceImpl implements ResidentService {
     public Resident getResidentById(Long resId) {
         return residentRepository.findByResId(resId)
                 .orElseThrow(()->new RuntimeException("입소자 정보가 없습니다." + resId));
+    }
+
+    @Override
+    public Guard createResidentGuard(GuardDTO guardDTO) {
+        Guard guard = guardRepository.findBySsn(guardDTO.getSsn())
+                .orElseThrow(()->new RuntimeException("Guard not found with ssn: " + guardDTO.getSsn()));
+//        Resident resId = residentRepository.findByResId(19L)
+//                .orElseThrow(() -> new RuntimeException("Resident not found with resId: 18L"));;
+        Long resId = guardDTO.getResId();
+        Resident resident = residentRepository.findById(resId)
+                .orElseThrow(()-> new RuntimeException("Resident not found with id: " + resId));
+
+        guard.setResident(resident);
+        guard.setSsn(guardDTO.getSsn());
+        guard.setRelation(guardDTO.getRelation());
+        guard.setPhone(guardDTO.getPhone());
+
+        return guardRepository.save(guard);
     }
 }
