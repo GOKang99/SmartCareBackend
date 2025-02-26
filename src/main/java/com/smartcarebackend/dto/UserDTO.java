@@ -26,10 +26,13 @@ public class UserDTO {
     private List<ResidentDTO> residents; // 입소자 정보 (연결된 입소자 리스트)
     private Role role;
 
+
+
     public UserDTO(Long userId, String username, String email, Role role) {
         this.userId = userId;
         this.username = username;
         this.email = email;
         this.role = role;
+
     }
 }

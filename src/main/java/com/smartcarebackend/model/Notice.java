@@ -36,6 +36,9 @@ public class Notice {
     @Column(name = "NOTICE_COUNT", nullable = false)
     private int noticeCount = 0; // 공지 조회수 (기본값 : 0 )
 
+    @Column(name = "NOTICE_IMAGEURL")
+    private String noticeImageUrl;  // 공지 내용 사진 URL
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "giver_id", referencedColumnName = "giverId")
     private Giver giver;

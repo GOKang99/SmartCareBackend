@@ -79,7 +79,9 @@ public class UserServiceImpl implements UserService {
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole()
+
         );
+
     }
 
     //유저이름으로 User 엔티티 찾기
