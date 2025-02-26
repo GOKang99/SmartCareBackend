@@ -1,6 +1,7 @@
 package com.smartcarebackend.service.impl;
 
 import com.smartcarebackend.dto.ResidentDTO;
+import com.smartcarebackend.dto.GuardDTO;
 import com.smartcarebackend.model.Giver;
 import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Resident;
@@ -10,7 +11,6 @@ import com.smartcarebackend.repositories.ResidentRepository;
 import com.smartcarebackend.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -188,11 +188,15 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
-    public Guard createResidentGuard(String ssn) {
-        Guard guard = guardRepository.findBySsn(ssn)
-                .orElseThrow(()->new RuntimeException("Guard not found with ssn: " + ssn));
-        Resident resId = residentRepository.findByResId(18L).get();
+    public Guard createResidentGuard(GuardDTO guardDTO) {
+        Guard guard = guardRepository.findBySsn(guardDTO.getSsn())
+                .orElseThrow(()->new RuntimeException("Guard not found with ssn: " + guardDTO.getSsn()));
+        Resident resId = residentRepository.findByResId(18L)
+                .orElseThrow(() -> new RuntimeException("Resident not found with resId: 18L"));;
         guard.setResident(resId);
+        guard.setSsn(guardDTO.getSsn());
+        guard.setRelation(guardDTO.getRelation());
+        guard.setPhone(guardDTO.getPhone());
         return guardRepository.save(guard);
     }
 }
