@@ -44,10 +44,11 @@ public class Composition {
     private Integer comFatLvl; // 내장지방레벨
 
     //참조하기
-    @Column(name = "RES_ID", nullable = false)
-    private Long resId; // 입소자 ID
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "guard_id", referencedColumnName = "guardId")
+    private Guard guard;
 
-
-    @Column(name = "GIVER_ID", nullable = false)
-    private Long giverId; // 처리자 ID (요양사 ID)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "giver_id", referencedColumnName = "giverId")
+    private Giver giver;
 }
