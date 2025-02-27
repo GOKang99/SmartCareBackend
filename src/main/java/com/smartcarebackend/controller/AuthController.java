@@ -6,6 +6,7 @@ import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.repositories.RoleRepository;
 import com.smartcarebackend.repositories.UserRepository;
 import com.smartcarebackend.security.jwt.JwtUtils;
+import com.smartcarebackend.security.request.ChangePwdRequest;
 import com.smartcarebackend.security.request.LoginRequest;
 import com.smartcarebackend.security.request.SignupRequest;
 import com.smartcarebackend.security.response.LoginResponse;
@@ -23,14 +24,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -54,10 +53,15 @@ public class AuthController {
 
     @Autowired
     UserService userService;
+
     @Autowired
     GiverRepository giverRepository;
+
     @Autowired
     GuardRepository guardRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     //로그인(시큐리티에서는 jwt 토큰을 발행하지 않으므로 로그인 컨트롤러를 구현해준다)
@@ -204,5 +208,34 @@ public class AuthController {
     public String getUsername(Principal principal){
         //Principal은 현재 인증된 사용자에 대한 정보가 담겨있다
         return principal.getName() != null ? principal.getName() : "";
+    }
+
+    //비밀번호 변경
+    @PostMapping("/public/changepwd")
+    public String changePwd(@RequestBody ChangePwdRequest changePwdRequest){
+        System.out.println("유저아이디"+changePwdRequest.getUserId());
+        User user=userRepository.findById(changePwdRequest.getUserId()).get(); //비밀번호 변경을 요청한 유저의 엔티티
+        System.out.println("유저"+user);
+        String currentPassword=changePwdRequest.getCurrentPassword(); //현재 비밀번호
+        String newPassword=changePwdRequest.getNewPassword(); //새로운 비밀번호
+        String confirmPassword=changePwdRequest.getConfirmPassword(); //확인용 비밀번호
+
+        //입력한 비밀번호와 DB에 등록된 비밀번호가 일치하는지 확인
+        if(!passwordEncoder.matches(currentPassword, user.getPassword())){
+            return "wrong password";
+        }
+        user.setPassword(passwordEncoder.encode(newPassword)); //유저엔티티에 새로운 비밀번호를 인코딩해서 set
+        userRepository.save(user); //새로운 비밀번호가 저장된 유저객체를 저장
+        return "success";
+    }
+
+    @PostMapping("/public/checkuser")
+    public ResponseEntity<String> checkUsername(@RequestBody SignupRequest signUpRequest){
+        Optional<User> user=userRepository.findByUsername(signUpRequest.getUsername());
+        if(user.isPresent()){
+            return ResponseEntity.status(400).body("이미 존재하는 유저네임입니다");
+        }
+        System.out.println(signUpRequest);
+        return ResponseEntity.ok("생성 가능한 유저네임입니다");
     }
 }
