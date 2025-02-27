@@ -16,18 +16,21 @@ public class MealDTO {
     private String fundDis;
     private String breTp;
     private String breQty;
-    private LocalTime breTime;
+
     private String lunTp;
     private String lunQty;
-    private LocalTime lunTime;
+
     private String dinTp;
     private String dinQty;
-    private LocalTime dinTime;
+
     private String morSnackQty;
-    private LocalTime morSnackTime;
+
     private String aftSnackQty;
-    private LocalTime aftSnackTime;
+
     private String remark;
+    private String resName; // 환자이름
     private Long resMealId; // Resident ID
     private Long giver;
+
+
 }

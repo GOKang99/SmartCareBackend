@@ -1,6 +1,7 @@
 package com.smartcarebackend.service;
 
 import com.smartcarebackend.dto.MealDTO;
+import com.smartcarebackend.model.Resident;
 
 import java.util.List;
 
@@ -11,6 +12,10 @@ public interface MealService {
 
     // 관리자 식사 일지 조회
     List<MealDTO> getAllMealsForAdmin();
+
+
+    // 관리자 식사 선택 조회
+    List<MealDTO> getMealsForAdmin(Long resId);
 
     // 관리자 식사 일지 저장
     MealDTO saveMealForAdmin(MealDTO mealDTO);
