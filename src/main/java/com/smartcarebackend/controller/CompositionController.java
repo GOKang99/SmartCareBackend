@@ -26,11 +26,15 @@ public class CompositionController {
     //요양보호사가 환자Id를 통해서 체성분 분석(건강검진) 등록하기
     @PostMapping("/create/{resId}/{giverId}")
     public CompositionDTO createComposition(@PathVariable Long resId,@PathVariable Long giverId ,@RequestBody CompositionDTO compositionDTO) {
+        System.out.println("넘어온resId"+ resId);
+        System.out.println("넘어온resId"+ giverId);
+        System.out.println("넘어온 DTO"+compositionDTO);
         CompositionDTO createdComposition = compositionService.createCompositions(resId,giverId,compositionDTO);
         return createdComposition;
     }
 
-    @DeleteMapping("/delete/{comId}/")
+//    지우기
+    @DeleteMapping("/delete/{comId}")
     public void deleteComposition(@PathVariable Long comId) {
         compositionService.deleteComposition(comId);
     }

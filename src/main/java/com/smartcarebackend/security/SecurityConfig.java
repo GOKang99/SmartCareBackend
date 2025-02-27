@@ -49,6 +49,7 @@ public class SecurityConfig {
                 -> requests
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/auth/public/**").permitAll()
+                .requestMatchers("/api/composition/**").permitAll()
                 .requestMatchers("/api/notice/**").permitAll()
                 .requestMatchers("/images/**").permitAll()
                 .anyRequest().authenticated());
