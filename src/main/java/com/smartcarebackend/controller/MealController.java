@@ -38,11 +38,13 @@ public class MealController {
 
     // 환자 식사 일지 조회
     @GetMapping("/resident/{resId}")
-    public ResponseEntity<List<MealDTO>> getMealForResident(@PathVariable Long guardId) {
-        Guard findGuard = guardRepository.findById(guardId).get();//가드엔티티 가져오기
+    public ResponseEntity<List<MealDTO>> getMealForResident(@PathVariable Long resId) {
+        Guard findGuard = guardRepository.findById(resId).get();//가드엔티티 가져오기
         Long findResidentId = findGuard.getResident().getResId();
+
         // 환자 식사 일지를 조회하는 서비스 호출
         List<MealDTO> mealDTOs = mealService.getMealForResident(findResidentId);
+        System.out.println("반환"+mealDTOs);
         return ResponseEntity.ok(mealDTOs); // 조회된 데이터를 200 OK와 함께 반환
     }
 

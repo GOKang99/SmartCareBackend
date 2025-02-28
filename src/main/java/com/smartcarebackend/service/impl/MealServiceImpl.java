@@ -43,7 +43,7 @@ public class MealServiceImpl implements MealService {
 
             mealDTO.setDinTp(meal.getDinTp());
             mealDTO.setDinQty(meal.getDinQty());
-
+            mealDTO.setResName(meal.getResident().getResName());
             mealDTO.setMorSnackQty(meal.getMorSnackQty());
 
             mealDTO.setAftSnackQty(meal.getAftSnackQty());

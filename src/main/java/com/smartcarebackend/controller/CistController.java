@@ -10,8 +10,15 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/cist")
 public class CistController {
+
     @Autowired
     private CistService cistService;
+
+    // ✅ 특정 대상자의 검사 기록을 리스트로 조회 (테이블용)
+    @GetMapping("/list/{residentId}")
+    public ResponseEntity<List<CistDTO>> getCistList(@PathVariable Long residentId) {
+        return ResponseEntity.ok(cistService.getCistByResident(residentId));
+    }
 
     // ✅ 특정 대상자의 검사 기록을 조회 (그래프 데이터 제공)
     @GetMapping("/graph/{residentId}")
