@@ -1,5 +1,6 @@
 package com.smartcarebackend.service;
 
+import com.smartcarebackend.dto.GuardDTO;
 import com.smartcarebackend.dto.UserDTO;
 import com.smartcarebackend.model.User;
 

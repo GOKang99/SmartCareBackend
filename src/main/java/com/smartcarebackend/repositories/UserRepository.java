@@ -1,5 +1,6 @@
 package com.smartcarebackend.repositories;
 
+import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -14,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
+
+    Optional<User> findBySsn(String ssn);
 }

@@ -5,9 +5,11 @@ import com.smartcarebackend.dto.GuardDTO;
 import com.smartcarebackend.model.Giver;
 import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Resident;
+import com.smartcarebackend.model.User;
 import com.smartcarebackend.repositories.GiverRepository;
 import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.repositories.ResidentRepository;
+import com.smartcarebackend.repositories.UserRepository;
 import com.smartcarebackend.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,9 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Autowired
     private GuardRepository guardRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     public ResidentServiceImpl(ResidentRepository residentRepository) {
@@ -189,19 +194,16 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public Guard createResidentGuard(GuardDTO guardDTO) {
-        Guard guard = guardRepository.findBySsn(guardDTO.getSsn())
+        User user = userRepository.findBySsn(guardDTO.getSsn())
                 .orElseThrow(()->new RuntimeException("Guard not found with ssn: " + guardDTO.getSsn()));
-//        Resident resId = residentRepository.findByResId(19L)
-//                .orElseThrow(() -> new RuntimeException("Resident not found with resId: 18L"));;
         Long resId = guardDTO.getResId();
         Resident resident = residentRepository.findById(resId)
                 .orElseThrow(()-> new RuntimeException("Resident not found with id: " + resId));
 
+        Guard guard = user.getGuard();
         guard.setResident(resident);
         guard.setSsn(guardDTO.getSsn());
-        guard.setRelation(guardDTO.getRelation());
         guard.setPhone(guardDTO.getPhone());
-
         return guardRepository.save(guard);
     }
 }

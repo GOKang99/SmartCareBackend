@@ -4,6 +4,7 @@ import com.smartcarebackend.dto.ResidentDTO;
 import com.smartcarebackend.dto.GuardDTO;
 import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Resident;
+import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,9 @@ public class ResidentController {
 
     @Autowired
     private ResidentService residentService;
+
+    @Autowired
+    private GuardRepository guardRepository;
 
     // 입소자 등록 API
     @PostMapping("/create")
