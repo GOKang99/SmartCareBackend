@@ -25,6 +25,7 @@
 //    private final MealRepository mealRepository;
 //    private final NoticeRepository noticeRepository;
 //    private final VisitRepository visitRepository;
+//    private final CompositionRepository compositionRepository;
 //
 //    private final PasswordEncoder passwordEncoder;
 //
@@ -132,20 +133,6 @@
 //            notice.setNoticeCount(0);
 //            notice.setGiver(giver);
 //            noticeRepository.save(notice);
-//
-//            // 11) Visit (면회 예약) 생성
-//            Visit visit = new Visit();
-//            visit.setVisDate(LocalDate.of(2025, 3, 10));
-//            visit.setVisTime(LocalTime.of(14, 0));
-//            visit.setVisTp("visit");
-//            visit.setVisRelation("아들");
-//            visit.setVisCnt(2);
-//            visit.setVisApply("pending");
-//            visit.setVisYn(false);  // 아직 방문 전
-//            visit.setRemark("퇴원 관련 상담 예정");
-//            visit.setGuard(guardRepository.findById((long)i).orElse(null));
-//            visit.setGiver(giver);
-//            visitRepository.save(visit);
 //        }
 //
 //        // 보호자 유저 10명 생성
@@ -185,6 +172,26 @@
 //            visit.setGuard(guard);
 //            visit.setGiver(giverRepository.findById((long)i).orElse(null)); // 해당 요양사 지정
 //            visitRepository.save(visit);
+//        }
+//        // 12) Composition (신체 측정 정보) 생성
+//        for (int i = 1; i <= 10; i++) {
+//            // 각 Resident에 대해 Composition 데이터 생성
+//            Resident resident = residentRepository.findById((long)i).orElse(null);
+//            if (resident != null) {
+//                Composition composition = new Composition();
+//                composition.setComDate(LocalDate.now()); // 오늘 날짜
+//                composition.setComHeight(165.0 + (i % 5)); // 신장: 예시로 165에서 증가
+//                composition.setComWeight(60.0 + (i % 5)); // 체중: 예시로 60에서 증가
+//                composition.setComSmm(25.0 + (i % 3)); // 골격근량
+//                composition.setComBfm(15.0 + (i % 2)); // 체지방량
+//                composition.setComPbf(30.0 + (i % 4)); // 체지방율
+//                composition.setComBmi(22.0); // BMI: 고정값
+//                composition.setComFatLvl(3); // 내장지방레벨: 예시로 3 설정
+//
+//                composition.setResident(resident); // Resident와 연결
+//                composition.setGiver(giverRepository.findById((long)i).orElse(null)); // Giver와 연결
+//                compositionRepository.save(composition);
+//            }
 //        }
 //
 //        // 더미 데이터 생성 완료
