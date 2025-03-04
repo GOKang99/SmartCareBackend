@@ -20,6 +20,7 @@ public class CompositionDTO {
     private Double comPbf;       // 체지방율
     private Double comBmi;       // BMI
     private Integer comFatLvl;   // 내장지방레벨
+    private String comResName; //환자 이름
 
     private Long resId;  // 참조 관계 - resId환자 ID만 전달
     private Long giverId;  // 참조 관계 - Giver의 ID만 전달

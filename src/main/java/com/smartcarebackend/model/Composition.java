@@ -43,6 +43,10 @@ public class Composition {
     @Column(name = "COM_FAT_LVL", nullable = false)
     private Integer comFatLvl; // 내장지방레벨
 
+    @Column(name = "COM_RES_NAME", nullable = false)
+    private String comResName;
+
+
     //참조하기
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "res_id", referencedColumnName = "resId")

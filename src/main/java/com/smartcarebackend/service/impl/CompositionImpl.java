@@ -42,6 +42,7 @@ public class CompositionImpl implements CompositionService {
         //받아온 환자 Id를 통해서 환자 찾기
         Resident resident = residentRepository.findById(resId)
                 .orElseThrow(()->new RuntimeException("예약 생성시 환자 Id에 따른 환자가 없습니다."));
+        composition.setComResName(resident.getResName());
         //받아온 요양보호사 Id를 통해서 등록하는 요양보호사 찾기.
         Giver giver = giverRepository.findById(giverId)
                 .orElseThrow(()->new RuntimeException("예약 생성시 요양보호사Id에 따른 환자를 찾을수 없습니다. "));
@@ -77,6 +78,7 @@ public class CompositionImpl implements CompositionService {
                 composition.getComPbf(),
                 composition.getComBmi(),
                 composition.getComFatLvl(),
+                composition.getComResName(),
                 composition.getResident() != null ? composition.getResident().getResId() : null,
                 composition.getGiver() != null ? composition.getGiver().getGiverId() : null
         );
