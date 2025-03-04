@@ -45,9 +45,7 @@ public class UserServiceImpl implements UserService {
         // 유저 조회
         User user = userRepository.findById(userId).orElseThrow(()
         -> new RuntimeException("유저를 찾을 수 없음"));
-        System.out.println("기버"+user.getGiver());
-        System.out.println("가드"+user.getGuard());
-
+        System.out.println("유저"+user);
         // 유저 정보 (ID, 이름, 이메일, 전화번호, 관계, 권한명 등)
         UserDTO dto = new UserDTO();
         dto.setUserId(user.getUserId());
@@ -55,6 +53,8 @@ public class UserServiceImpl implements UserService {
         dto.setPhone(user.getPhone());
         String roleName = user.getRole().getRoleName().name();
         dto.setRoleName(roleName);
+        dto.setRealname(user.getRealname());
+        dto.setUserimage(user.getUserimage());
 
         // 권한 따라서 다르게 표시
         if ("ROLE_USER".equals(roleName)) {
