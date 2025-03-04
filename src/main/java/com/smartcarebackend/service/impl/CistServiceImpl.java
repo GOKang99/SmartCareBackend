@@ -104,6 +104,7 @@ public class CistServiceImpl implements CistService {
     public void deleteCist(Long id) {
         cistRepository.deleteById(id);
     }
+
     //측정 대상자의 cist  조회
     @Override
     public List<CistDTO> getCistByResident(Long residentId) {

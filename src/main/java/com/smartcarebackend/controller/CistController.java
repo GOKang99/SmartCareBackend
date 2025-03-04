@@ -9,6 +9,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/cist")
+@CrossOrigin(origins = "*")
 public class CistController {
 
     @Autowired
@@ -51,16 +52,16 @@ public class CistController {
     }
 
     // ✅ Cist 수정
-    @PutMapping("/{cistId}")
-    public ResponseEntity<CistDTO> updateCist(@PathVariable Long cistId, @RequestBody CistDTO cistDTO) {
-        CistDTO updatedCist = cistService.updateCist(cistId, cistDTO);
+    @PutMapping("/{cisId}")
+    public ResponseEntity<CistDTO> updateCist(@PathVariable Long cisId, @RequestBody CistDTO cistDTO) {
+        CistDTO updatedCist = cistService.updateCist(cisId, cistDTO);
         return ResponseEntity.ok(updatedCist);
     }
 
     // ✅ Cist 삭제
-    @DeleteMapping("/{cistId}")
-    public ResponseEntity<Void> deleteCist(@PathVariable Long cistId) {
-        cistService.deleteCist(cistId);
+    @DeleteMapping("/{cisId}")
+    public ResponseEntity<Void> deleteCist(@PathVariable Long cisId) {
+        cistService.deleteCist(cisId);
         return ResponseEntity.noContent().build();
     }
 }
