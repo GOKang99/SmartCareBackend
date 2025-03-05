@@ -56,4 +56,9 @@ public class Giver {
     @ToString.Exclude
     private List<Notice> notice;
 
+    @OneToMany(mappedBy = "giver", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
+    @ToString.Exclude
+    private List<Composition> compositions;
+
 }

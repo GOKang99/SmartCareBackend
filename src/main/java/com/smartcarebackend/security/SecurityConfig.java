@@ -49,8 +49,11 @@ public class SecurityConfig {
                 -> requests
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/auth/public/**").permitAll()
+                .requestMatchers("/api/composition/**").permitAll()
                 .requestMatchers("/api/notice/**").permitAll()
                 .requestMatchers("/images/**").permitAll()
+                .requestMatchers("/api/giver/**").permitAll()
+                .requestMatchers("/userimage/**").permitAll()
                 .anyRequest().authenticated());
         http.exceptionHandling(exception
                 -> exception.authenticationEntryPoint(unauthorizedHandler));

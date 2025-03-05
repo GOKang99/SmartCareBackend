@@ -123,9 +123,12 @@ public class VisitServiceImpl implements VisitService {
         dto.setVisApply(visit.getVisApply());
         dto.setVisYn(visit.getVisYn());
         dto.setRemark(visit.getRemark());
-        // Guard가 연결되어 있다면 guardId 셋팅
-        if (visit.getGuard() != null) {
+        // Guard가 연결되어 있다면 guardId 셋팅 ResName셋팅
+        if (visit.getGuard() != null && visit.getGuard().getResident() != null) {
             dto.setGuardId(visit.getGuard().getGuardId());
+            dto.setResName(visit.getGuard() //Guard를 얻고
+                    .getResident() //Guard객체에서 Resident객체를 얻어서 
+                    .getResName()); //ResName을 찾아온다
         }
         return dto;
     }

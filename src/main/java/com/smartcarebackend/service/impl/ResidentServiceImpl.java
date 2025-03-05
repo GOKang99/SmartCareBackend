@@ -5,9 +5,11 @@ import com.smartcarebackend.dto.GuardDTO;
 import com.smartcarebackend.model.Giver;
 import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Resident;
+import com.smartcarebackend.model.User;
 import com.smartcarebackend.repositories.GiverRepository;
 import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.repositories.ResidentRepository;
+import com.smartcarebackend.repositories.UserRepository;
 import com.smartcarebackend.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,9 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Autowired
     private GuardRepository guardRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     public ResidentServiceImpl(ResidentRepository residentRepository) {
@@ -67,8 +72,8 @@ public class ResidentServiceImpl implements ResidentService {
             if (!Files.exists(uploadImagesPath)) {
                 Files.createDirectory(uploadImagesPath);
             }
-            try(InputStream inputStream = resImages.getInputStream()) {
-                Files.copy(inputStream,Paths.get(uploadImages + resFileName),
+            try (InputStream inputStream = resImages.getInputStream()) {
+                Files.copy(inputStream, Paths.get(uploadImages + resFileName),
                         StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (Exception e) {
@@ -84,7 +89,8 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setGiver(giver); // 요양보호사 ID
         resident.setResName(residentDTO.getResName()); // 이름
         resident.setResGender(residentDTO.getResGender()); // 성별
-        resident.setResBirth(residentDTO.getResBirth());; // 생년월일
+        resident.setResBirth(residentDTO.getResBirth());
+        ; // 생년월일
         resident.setResPhone(residentDTO.getResPhone()); // 전화번호
         resident.setResGrade(residentDTO.getResGrade()); // 등급
         resident.setDementiaYn(residentDTO.isDementiaYn()); // 치매 유무
@@ -112,7 +118,7 @@ public class ResidentServiceImpl implements ResidentService {
     @Override
     public Resident updateResident(Long redId, ResidentDTO residentDTO) {
         Resident resident = residentRepository.findById(redId).get();
-        if (residentDTO.getResImages() != null){
+        if (residentDTO.getResImages() != null) {
             String uploadImages = "public/images/";
             Path oldImagePath = Paths.get(uploadImages + resident.getResImageAddress());
             try {
@@ -125,9 +131,9 @@ public class ResidentServiceImpl implements ResidentService {
             Date updateDate = new Date();
             String resFileName = updateDate.getTime() + "_" + resImages.getOriginalFilename();
 
-            try(InputStream inputStream = resImages.getInputStream()) {
+            try (InputStream inputStream = resImages.getInputStream()) {
                 Files.copy(inputStream, Paths.get(uploadImages + resFileName), StandardCopyOption.REPLACE_EXISTING);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
 
@@ -136,7 +142,8 @@ public class ResidentServiceImpl implements ResidentService {
 
         resident.setResName(residentDTO.getResName()); // 이름
         resident.setResGender(residentDTO.getResGender()); // 성별
-        resident.setResBirth(residentDTO.getResBirth());; // 생년월일
+        resident.setResBirth(residentDTO.getResBirth());
+        ; // 생년월일
         resident.setResPhone(residentDTO.getResPhone()); // 전화번호
         resident.setResGrade(residentDTO.getResGrade()); // 등급
         resident.setDementiaYn(residentDTO.isDementiaYn()); // 치매 유무
@@ -169,10 +176,11 @@ public class ResidentServiceImpl implements ResidentService {
                 Files.delete(uploadImagesPath);
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
-        }
+            }
             residentRepository.delete(resident);
-    } catch (Exception e) {
-        System.out.println("Error: " + e.getMessage());}
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     @Override
@@ -184,23 +192,19 @@ public class ResidentServiceImpl implements ResidentService {
     @Override
     public Resident getResidentById(Long resId) {
         return residentRepository.findByResId(resId)
-                .orElseThrow(()->new RuntimeException("입소자 정보가 없습니다." + resId));
+                .orElseThrow(() -> new RuntimeException("입소자 정보가 없습니다." + resId));
     }
 
     @Override
     public Guard createResidentGuard(GuardDTO guardDTO) {
-        Guard guard = guardRepository.findBySsn(guardDTO.getSsn())
-                .orElseThrow(()->new RuntimeException("Guard not found with ssn: " + guardDTO.getSsn()));
-//        Resident resId = residentRepository.findByResId(19L)
-//                .orElseThrow(() -> new RuntimeException("Resident not found with resId: 18L"));;
+        System.out.println("가능?" + guardDTO.getSsn());
+        User user = userRepository.findBySsn(guardDTO.getSsn())
+                .orElseThrow(() -> new RuntimeException("Guard not found with ssn: " + guardDTO.getSsn()));
         Long resId = guardDTO.getResId();
         Resident resident = residentRepository.findById(resId)
-                .orElseThrow(()-> new RuntimeException("Resident not found with id: " + resId));
-
+                .orElseThrow(() -> new RuntimeException("Resident not found with id: " + resId));
+        Guard guard = user.getGuard();
         guard.setResident(resident);
-        guard.setSsn(guardDTO.getSsn());
-        guard.setRelation(guardDTO.getRelation());
-        guard.setPhone(guardDTO.getPhone());
 
         return guardRepository.save(guard);
     }

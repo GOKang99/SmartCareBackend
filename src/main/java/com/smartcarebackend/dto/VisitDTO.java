@@ -18,6 +18,7 @@ public class VisitDTO {
     private String visApply;
     private Boolean visYn;
     private String remark;
+    private String resName; //환자 이름 VisitDTO에 추가
 
     // Guard 연동을 위한 ID
     private Long guardId; //guardId만 담아서 Service에서 리파짓토리로 찾아옴
