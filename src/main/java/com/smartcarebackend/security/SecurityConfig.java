@@ -52,6 +52,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/composition/**").permitAll()
                 .requestMatchers("/api/notice/**").permitAll()
                 .requestMatchers("/images/**").permitAll()
+                .requestMatchers("/api/giver/**").permitAll()
+                .requestMatchers("/userimage/**").permitAll()
                 .anyRequest().authenticated());
         http.exceptionHandling(exception
                 -> exception.authenticationEntryPoint(unauthorizedHandler));

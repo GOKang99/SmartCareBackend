@@ -18,6 +18,8 @@ public class UserDTO {
     private String phone;  // 연락처
     private boolean agree;  // 약관 동의 여부
     private String roleName; // 역할(Role) 이름
+    private String realname; // 성명
+    private String userimage; //이미지 파일명
 
     private Long residentId; //새 필드
     private String residentName; //새 필드
