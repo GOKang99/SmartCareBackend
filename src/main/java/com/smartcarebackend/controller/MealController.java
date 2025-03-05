@@ -71,7 +71,7 @@ public class MealController {
         }
         return ResponseEntity.ok(mealDTOs); // 조회된 데이터를 200 OK와 함께 반환
     }
-
+    // 레지던트 찾기
     @GetMapping("/admin/residents")
     public ResponseEntity<List<Resident>> getAllMResidentsForAdmin() {
 //        String username=principal.getName();

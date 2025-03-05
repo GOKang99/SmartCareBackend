@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,42 @@ public class CistServiceImpl implements CistService {
         else if (totalScore >= 20) return "주의";
         return "인지저하 의심";
     }
+    // 환자 정보 조회
+    @Override
+    public List<CistDTO> getAllCistsForAdmin() {
+        List<Cist> cists = cistRepository.findAll(); // 모든 Cist 데이터를 조회
+        List<CistDTO> cistDTOs = new ArrayList<>(); // CistDTO 리스트 초기화
+
+        for (Cist cist : cists) {
+            CistDTO cistDTO = new CistDTO();
+
+            // Cist 엔티티에서 CistDTO로 데이터 변환
+            cistDTO.setCisId(cist.getCisId()); // 검사 ID
+            cistDTO.setCisDt(cist.getCisDt()); // 검사 날짜
+            cistDTO.setCisGrade(cist.getCisGrade()); // 검사 판정
+            cistDTO.setOrientation(cist.getOrientation()); // 지남력 점수
+            cistDTO.setAttention(cist.getAttention()); // 주의력 점수
+            cistDTO.setSpatialTemporal(cist.getSpatialTemporal()); // 시공간 능력 점수
+            cistDTO.setExecutiveFunction(cist.getExecutiveFunction()); // 집행기능 점수
+            cistDTO.setMemory(cist.getMemory()); // 기억력 점수
+            cistDTO.setLanguage(cist.getLanguage()); // 언어 기능 점수
+            cistDTO.setTotalScore(cist.getTotalScore()); // 총합 점수
+            cistDTO.setCisModifyDt(cist.getCisModifyDt()); // 수정 날짜
+
+            // 환자 이름과 Giver ID를 가져옴
+            cistDTO.setResName(cist.getResident().getResName()); // 환자 이름
+            cistDTO.setGiverId(cist.getGiver().getGiverId()); // Giver ID
+
+            // 레지던트 ID 설정
+            cistDTO.setResidentId(cist.getResident().getResId()); // 환자 ID
+
+            // 변환된 CistDTO를 리스트에 추가
+            cistDTOs.add(cistDTO);
+        }
+
+        return cistDTOs; // CistDTO 리스트 반환
+    }
+
     // cist그래프 생성
     @Override
     @Transactional
@@ -105,7 +142,7 @@ public class CistServiceImpl implements CistService {
         cistRepository.deleteById(id);
     }
 
-    //측정 대상자의 cist  조회
+    //측정 대상자의 cist 조회
     @Override
     public List<CistDTO> getCistByResident(Long residentId) {
 
