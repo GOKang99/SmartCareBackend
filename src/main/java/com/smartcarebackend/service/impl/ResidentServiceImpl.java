@@ -36,9 +36,6 @@ public class ResidentServiceImpl implements ResidentService {
     private GuardRepository guardRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     public ResidentServiceImpl(ResidentRepository residentRepository) {
         this.residentRepository = residentRepository;
     }
@@ -196,16 +193,46 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
-    public Guard createResidentGuard(GuardDTO guardDTO) {
-        System.out.println("가능?" + guardDTO.getSsn());
-        User user = userRepository.findBySsn(guardDTO.getSsn())
-                .orElseThrow(() -> new RuntimeException("Guard not found with ssn: " + guardDTO.getSsn()));
+    public Guard signUpGuard(GuardDTO guardDTO) {
+        // GuardDTO 의 resId 가져오기
         Long resId = guardDTO.getResId();
-        Resident resident = residentRepository.findById(resId)
-                .orElseThrow(() -> new RuntimeException("Resident not found with id: " + resId));
-        Guard guard = user.getGuard();
+
+        // 입소자(resident)가 존재하는지 확인
+        Resident resident = residentRepository.findById(resId).orElse(null);
+
+        // 입소자가 존재하지 않을 시 예외처리 및 null 반환
+        if (resident == null) {
+            throw new RuntimeException("입소자가 존재하지 않습니다.");
+        }
+
+        // Guard 객체 생성
+        Guard guard = new Guard();
+        guard.setRelation(guardDTO.getRelation());
+
+        // Guard 의 User 객체도 DTO 에서 가져와 설정
+        User user = new User();
+        user.setRealname(guardDTO.getRealname());
+        user.setSsn(guardDTO.getSsn());
+        user.setPhone(guardDTO.getPhone());
+
+        guard.setUser(user);
         guard.setResident(resident);
 
         return guardRepository.save(guard);
     }
 }
+
+
+//    @Override
+//    public Guard createResidentGuard(GuardDTO guardDTO) {
+//        System.out.println("가능?" + guardDTO.getSsn());
+//        User user = userRepository.findBySsn(guardDTO.getSsn())
+//                .orElseThrow(() -> new RuntimeException("Guard not found with ssn: " + guardDTO.getSsn()));
+//        Long resId = guardDTO.getResId();
+//        Resident resident = residentRepository.findById(resId)
+//                .orElseThrow(() -> new RuntimeException("Resident not found with id: " + resId));
+//        Guard guard = user.getGuard();
+//        guard.setResident(resident);
+//
+//        return guardRepository.save(guard);
+//    }

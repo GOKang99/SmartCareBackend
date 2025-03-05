@@ -14,6 +14,8 @@ public class GuardDTO {
     private String phone;  //휴대폰 번호
 
     private String ssn;  //주민등록번호 (중복 체크)
+    
+    private String realname; // 이름
 
     private Long resId;
 }

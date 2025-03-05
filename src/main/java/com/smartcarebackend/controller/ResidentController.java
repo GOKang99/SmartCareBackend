@@ -48,15 +48,15 @@ public class ResidentController {
     public Resident getResidentById(@PathVariable Long resId) {
         return residentService.getResidentById(resId);
     }
-
-    @PutMapping("/guard")
-    public ResponseEntity<Guard> registerGuard(@RequestBody GuardDTO guardDTO) {
-        System.out.println("내용: " + guardDTO);
-        try{
-            Guard guard = residentService.createResidentGuard(guardDTO);
-            return ResponseEntity.ok(guard);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
 }
+
+//    @PutMapping("/guard")
+//    public ResponseEntity<Guard> registerGuard(@RequestBody GuardDTO guardDTO) {
+//        System.out.println("내용: " + guardDTO);
+//        try{
+//            Guard guard = residentService.createResidentGuard(guardDTO);
+//            return ResponseEntity.ok(guard);
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//        }
+//    }

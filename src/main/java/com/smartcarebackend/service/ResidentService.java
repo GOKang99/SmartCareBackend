@@ -25,5 +25,5 @@ public interface ResidentService {
     Resident getResidentById(Long resId);
 
     // 보호자 등록
-    Guard createResidentGuard(GuardDTO guardDTO);
+    Guard signUpGuard(GuardDTO guardDTO);
 }
