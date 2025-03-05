@@ -17,4 +17,7 @@ public interface CistService {
     void deleteCist(Long id);
     // 환자별 cist 조회
     List<CistDTO> getCistByResident(Long residentId);
+
+    // 특정 레지던트의 Cist 조회 (관리자 페이지)
+    List<CistDTO> getCistsForAdmin(Long resId);
 }

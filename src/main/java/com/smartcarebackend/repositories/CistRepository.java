@@ -9,4 +9,6 @@ public interface CistRepository extends JpaRepository<Cist, Long> {
 
     // 특정 대상자의 Cist 기록을 날짜순으로 조회
     List<Cist> findByResidentResIdOrderByCisDtDesc(Long resId);
+
+    List<Cist> findByResident_ResId(Long resId);
 }

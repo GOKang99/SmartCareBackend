@@ -81,11 +81,11 @@ public class CistServiceImpl implements CistService {
     public CistDTO createCist(CistDTO dto) {
 
         //점수 항목이 모두 입력되었는지체크
-        if (dto.getOrientation() == null || dto.getAttention() == null ||
-                dto.getSpatialTemporal() == null || dto.getExecutiveFunction() == null ||
-                dto.getMemory() == null || dto.getLanguage() == null) {
-            throw new IllegalArgumentException("모든 점수 항목을 입력해야 합니다.");
-        }
+//        if (dto.getOrientation() == null || dto.getAttention() == null ||
+//                dto.getSpatialTemporal() == null || dto.getExecutiveFunction() == null ||
+//                dto.getMemory() == null || dto.getLanguage() == null) {
+//            throw new IllegalArgumentException("모든 점수 항목을 입력해야 합니다.");
+//        }
 
         //cist 객체 생성 후 데이터 설정
         Cist cist = new Cist();
@@ -175,5 +175,35 @@ public class CistServiceImpl implements CistService {
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+
+    // 특정 레지던트의 Cist 조회 (관리자 페이지)
+    @Override
+    public List<CistDTO> getCistsForAdmin(Long resId) {
+        List<Cist> cists = cistRepository.findByResident_ResId(resId); // 특정 레지던트의 Cist 조회
+        List<CistDTO> cistDTOs = new ArrayList<>();
+
+        for (Cist cist : cists) {
+            CistDTO cistDTO = new CistDTO();
+            cistDTO.setCisId(cist.getCisId()); // 검사 ID
+            cistDTO.setCisDt(cist.getCisDt()); // 검사 날짜
+            cistDTO.setCisGrade(cist.getCisGrade()); // 검사 판정 (정상, 인지저하 의심 등)
+            cistDTO.setOrientation(cist.getOrientation()); // 지남력 점수
+            cistDTO.setAttention(cist.getAttention()); // 주의력 점수
+            cistDTO.setSpatialTemporal(cist.getSpatialTemporal()); // 시공간 능력 점수
+            cistDTO.setExecutiveFunction(cist.getExecutiveFunction()); // 집행기능 점수
+            cistDTO.setMemory(cist.getMemory()); // 기억력 점수
+            cistDTO.setLanguage(cist.getLanguage()); // 언어 기능 점수
+            cistDTO.setTotalScore(cist.getTotalScore()); // 총합 점수
+            cistDTO.setCisModifyDt(cist.getCisModifyDt()); // 수정 날짜
+            cistDTO.setResName(cist.getResident().getResName()); // 환자 이름
+            cistDTO.setGiverId(cist.getGiver().getGiverId()); // 관리자인 Giver의 ID
+            cistDTO.setResidentId(cist.getResident().getResId()); // 검사를 받은 Resident의 ID
+
+            cistDTOs.add(cistDTO);
+        }
+
+        return cistDTOs;
     }
 }
