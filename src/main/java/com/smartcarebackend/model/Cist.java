@@ -15,7 +15,6 @@ public class Cist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cisId; //검사 아이디
 
-    @CreationTimestamp
     @Column(name = "CIS_DT", nullable = false)
     private String cisDt; //검사일자
 
@@ -43,7 +42,7 @@ public class Cist {
     @Column(name = "CIS_TOTALSCORE", length = 10)
     private Long totalScore; //총합계점수 점수:30
 
-    @CreationTimestamp
+
     @Column(name = "CIS_MODIFY_DT")
     private String cisModifyDt; // 수정 날짜
 

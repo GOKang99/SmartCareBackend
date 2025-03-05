@@ -96,7 +96,7 @@ public class CistServiceImpl implements CistService {
         cist.setMemory(dto.getMemory());
         cist.setLanguage(dto.getLanguage());
         cist.setTotalScore(calculateTotalScore(dto));
-
+        cist.setCisDt(dto.getCisDt());
         cist.setCisGrade(determineGrade(cist.getTotalScore()));
 
         // Giver 및 Resident 객체 설정
