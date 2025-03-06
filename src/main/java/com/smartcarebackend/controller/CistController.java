@@ -1,6 +1,8 @@
 package com.smartcarebackend.controller;
 
 import com.smartcarebackend.dto.CistDTO;
+import com.smartcarebackend.model.Guard;
+import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.service.CistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,16 @@ import java.util.*;
 public class CistController {
     @Autowired
     private CistService cistService;
+
+    @Autowired
+    private GuardRepository guardRepository;
+
+    //생활현황의 cist검사 데이터 가져오기(/api/cist)
+    @GetMapping
+    public ResponseEntity<List<CistDTO>> getStatusCists(@PathVariable Long guardId) {
+        Guard getGuard = guardRepository.findById(guardId).orElseThrow(()-> new RuntimeException("보호자 정보를 찾을 수 없습니다."));
+        return  null;
+    }
 
     // ✅ 특정 대상자의 검사 기록을 조회 (그래프 데이터 제공)
     @GetMapping("/graph/{residentId}")
