@@ -108,17 +108,17 @@ public class SecondDummy implements CommandLineRunner {
             meal.setFundDis("중증");
             meal.setBreTp("일반식");
             meal.setBreQty("1인분");
-            meal.setBreTime(LocalTime.of(8, 0));
+
             meal.setLunTp("영양식");
             meal.setLunQty("1.5인분");
-            meal.setLunTime(LocalTime.of(12, 30));
+
             meal.setDinTp("죽");
             meal.setDinQty("1인분");
-            meal.setDinTime(LocalTime.of(18, 0));
+
             meal.setMorSnackQty("반인분");
-            meal.setMorSnackTime(LocalTime.of(10, 0));
+
             meal.setAftSnackQty("간단간식");
-            meal.setAftSnackTime(LocalTime.of(15, 30));
+
             meal.setRemark("특이 사항 없음");
             meal.setResident(resident);
             meal.setGiver(giver);

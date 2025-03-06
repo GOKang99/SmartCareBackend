@@ -11,4 +11,7 @@ public interface CompositionService {
     List<CompositionDTO> getCompositionsByResId(Long resId);
 
     CompositionDTO createCompositions(Long resId, Long giverId, CompositionDTO compositionDTO);
+
+    CompositionDTO updateComposition(Long comId, Long updatedBy, CompositionDTO compositionDTO);
+
 }
