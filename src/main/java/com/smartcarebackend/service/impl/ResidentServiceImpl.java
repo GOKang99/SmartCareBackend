@@ -197,9 +197,8 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public Guard createResidentGuard(GuardDTO guardDTO) {
-        System.out.println("가능?" + guardDTO.getSsn());
-        User user = userRepository.findBySsn(guardDTO.getSsn())
-                .orElseThrow(() -> new RuntimeException("Guard not found with ssn: " + guardDTO.getSsn()));
+        User user = userRepository.findByRealname(guardDTO.getRealname())
+                .orElseThrow(() -> new RuntimeException("Guard not found with ssn: " + guardDTO.getRealname()));
         Long resId = guardDTO.getResId();
         Resident resident = residentRepository.findById(resId)
                 .orElseThrow(() -> new RuntimeException("Resident not found with id: " + resId));
