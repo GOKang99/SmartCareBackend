@@ -12,6 +12,7 @@ import com.smartcarebackend.service.CompositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,6 +58,8 @@ public class CompositionImpl implements CompositionService {
 
     }
 
+
+
     //compostionId로 삭제하기
     @Override
     public void deleteComposition(Long comId) {
@@ -64,6 +67,30 @@ public class CompositionImpl implements CompositionService {
 
     }
 
+    //수정하기
+    @Override
+    public CompositionDTO updateComposition(Long comId, Long updatedBy, CompositionDTO compositionDTO) {
+        Composition composition = compositionRepository.findById(comId)
+                .orElseThrow(() -> new RuntimeException("해당 ID의 체성분 분석 데이터를 찾을 수 없습니다."));
+
+        Giver updateGiver = giverRepository.findById(updatedBy)
+                .orElseThrow(()-> new RuntimeException("해당하는 요양사 없음"));
+
+        composition.setComHeight(compositionDTO.getComHeight());
+        composition.setComWeight(compositionDTO.getComWeight());
+        composition.setComSmm(compositionDTO.getComSmm());
+        composition.setComBfm(compositionDTO.getComBfm());
+        composition.setComPbf(compositionDTO.getComPbf());
+        composition.setComBmi(compositionDTO.getComBmi());
+        composition.setComFatLvl(compositionDTO.getComFatLvl());
+        //수정한사람, 시간 업데이트
+        composition.setUpdatedBy(updatedBy);
+        composition.setUpdatedAt(LocalDateTime.now());
+
+        Composition updatedComposition = compositionRepository.save(composition);
+        return toDTO(updatedComposition);
+
+    }
 
 
     // Entity -> DTO 변환
@@ -79,6 +106,8 @@ public class CompositionImpl implements CompositionService {
                 composition.getComBmi(),
                 composition.getComFatLvl(),
                 composition.getComResName(),
+                composition.getUpdatedBy(),
+                composition.getUpdatedAt(),
                 composition.getResident() != null ? composition.getResident().getResId() : null,
                 composition.getGiver() != null ? composition.getGiver().getGiverId() : null
         );
@@ -96,6 +125,8 @@ public class CompositionImpl implements CompositionService {
         composition.setComPbf(dto.getComPbf());
         composition.setComBmi(dto.getComBmi());
         composition.setComFatLvl(dto.getComFatLvl());
+        composition.setUpdatedBy(dto.getUpdatedBy());
+        composition.setUpdatedAt(dto.getUpdatedAt());
         return composition;
     }
 }

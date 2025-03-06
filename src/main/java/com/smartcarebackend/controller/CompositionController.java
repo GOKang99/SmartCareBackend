@@ -39,6 +39,13 @@ public class CompositionController {
         compositionService.deleteComposition(comId);
     }
 
+    //모든 체성분 분석 가져오기
+
+    //수정하기
+    @PutMapping("/update/{comId}/{updatedBy}")
+    public CompositionDTO updateComposition(@PathVariable Long comId,@PathVariable Long updatedBy,@RequestBody CompositionDTO compositionDTO) {
+        return compositionService.updateComposition(comId, updatedBy, compositionDTO);
+    }
 
 }
 
