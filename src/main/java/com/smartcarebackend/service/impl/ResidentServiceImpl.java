@@ -92,8 +92,7 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setGiver(giver); // 요양보호사 ID
         resident.setResName(residentDTO.getResName()); // 이름
         resident.setResGender(residentDTO.getResGender()); // 성별
-        resident.setResBirth(residentDTO.getResBirth());
-        ; // 생년월일
+        resident.setResBirth(residentDTO.getResBirth()); // 생년월일
         resident.setResPhone(residentDTO.getResPhone()); // 전화번호
         resident.setResGrade(residentDTO.getResGrade()); // 등급
         resident.setDementiaYn(residentDTO.isDementiaYn()); // 치매 유무
@@ -112,7 +111,10 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setResCareGroup(residentDTO.getResCareGroup()); // 케어그룹
         resident.setResFoodType(residentDTO.getResFoodType()); // 식사종류
         resident.setResFunctionDis(residentDTO.getResFunctionDis()); // 기능장애
-
+        resident.setResAdmissionYn(residentDTO.getResAdmissionYn()); // 재입소 여부
+        resident.setKoreanReadableYn(residentDTO.getKoreanReadableYn()); // 한글 해독
+        resident.setReligion(residentDTO.getReligion()); // 종교
+        resident.setMaritalStatus(residentDTO.getMaritalStatus()); // 결혼여부
         resident.setResImageAddress(resFileName); // 이미지 주소
 
         return residentRepository.save(resident);
@@ -145,8 +147,7 @@ public class ResidentServiceImpl implements ResidentService {
 
         resident.setResName(residentDTO.getResName()); // 이름
         resident.setResGender(residentDTO.getResGender()); // 성별
-        resident.setResBirth(residentDTO.getResBirth());
-        ; // 생년월일
+        resident.setResBirth(residentDTO.getResBirth()); // 생년월일
         resident.setResPhone(residentDTO.getResPhone()); // 전화번호
         resident.setResGrade(residentDTO.getResGrade()); // 등급
         resident.setDementiaYn(residentDTO.isDementiaYn()); // 치매 유무
@@ -163,6 +164,10 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setResCareGroup(residentDTO.getResCareGroup()); // 케어그룹
         resident.setResFoodType(residentDTO.getResFoodType()); // 식사종류
         resident.setResFunctionDis(residentDTO.getResFunctionDis()); // 기능장애
+        resident.setResAdmissionYn(residentDTO.getResAdmissionYn()); // 재입소 여부
+        resident.setKoreanReadableYn(residentDTO.getKoreanReadableYn()); // 한글 해독
+        resident.setReligion(residentDTO.getReligion()); // 종교
+        resident.setMaritalStatus(residentDTO.getMaritalStatus()); // 결혼여부
 
         return residentRepository.save(resident);
     }

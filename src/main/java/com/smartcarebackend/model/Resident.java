@@ -81,6 +81,17 @@ public class Resident {
     @Column(name = "res_function_dis")
     private String resFunctionDis; // 기능장애
 
+    @Column(name = "res_admission_yn")
+    private String resAdmissionYn; // 재입소 여부
+    @Column(name = "korean_readable_yn")
+    private String koreanReadableYn; // 한글 해독 가능 여부
+
+    @Column(name = "religion")
+    private String religion; // 종교 (예: 불교, 기독교 등)
+
+    @Column(name = "marital_status")
+    private String maritalStatus; // 배우자 여부 ("기혼", "미혼", "사망")
+
     @Column(name = "res_image_address")
     private String resImageAddress; // 입소자 사진
 
