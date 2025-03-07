@@ -4,6 +4,7 @@ import com.smartcarebackend.dto.CompositionDTO;
 import com.smartcarebackend.model.Composition;
 import com.smartcarebackend.service.CompositionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,6 +46,13 @@ public class CompositionController {
     @PutMapping("/update/{comId}/{updatedBy}")
     public CompositionDTO updateComposition(@PathVariable Long comId,@PathVariable Long updatedBy,@RequestBody CompositionDTO compositionDTO) {
         return compositionService.updateComposition(comId, updatedBy, compositionDTO);
+    }
+
+    //보호자와 연결된 환자의 체성분 리스트 가져오기
+    @GetMapping("/status/{guardId}")
+    public ResponseEntity<List<CompositionDTO>> getCompositionForStatus(@PathVariable Long guardId){
+        List<CompositionDTO> compositionDTOList = compositionService.getStatusCompositionByGuardId(guardId);
+        return ResponseEntity.ok(compositionDTOList);
     }
 
 }

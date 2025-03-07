@@ -3,9 +3,11 @@ package com.smartcarebackend.service.impl;
 import com.smartcarebackend.dto.CistDTO;
 import com.smartcarebackend.model.Cist;
 import com.smartcarebackend.model.Giver;
+import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Resident;
 import com.smartcarebackend.repositories.CistRepository;
 import com.smartcarebackend.repositories.GiverRepository;
+import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.repositories.ResidentRepository;
 import com.smartcarebackend.service.CistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ public class CistServiceImpl implements CistService {
     GiverRepository giverRepository;
     @Autowired
     ResidentRepository residentRepository;
+    @Autowired
+    GuardRepository guardRepository;
 
     // 총점 계산 메서드
     private Long calculateTotalScore(CistDTO dto) {
@@ -175,5 +179,49 @@ public class CistServiceImpl implements CistService {
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CistDTO> getStatusCistByGuardId(Long guardId) {
+        Guard getGuard = guardRepository.findById(guardId).orElseThrow(()-> new RuntimeException("Cist검사결과 조회 중 보호자 정보를 찾지 못했습니다")); //로그인 된 보호자의 엔티티 가져오기
+        Resident resident = getGuard.getResident();
+        List<Cist> getCist = cistRepository.findByResidentOrderByCisIdDesc(resident); //환자 엔티티로 Cist 리스트 가져오기
+        List<CistDTO> cistDTOList = new ArrayList<>(); //새로운 cistDTO 리스트 생성
+        //가져온 정보가 없는 경우 빈 CistDTO 반환
+        if(getCist.size()==0){
+            return cistDTOList;
+        }
+        for(Cist cist : getCist){
+            CistDTO cistDTO = convertToDTO(cist);
+            cistDTOList.add(cistDTO);
+        }
+
+        return cistDTOList;
+    }
+
+
+    //엔티티 -> DTO
+    private CistDTO convertToDTO(Cist cist){
+        CistDTO cistDTO = new CistDTO(); //새로운 DTO객체 생성
+        cistDTO.setCisId(cist.getCisId()); // 검사 ID
+        cistDTO.setCisDt(cist.getCisDt()); // 검사 날짜
+        cistDTO.setCisGrade(cist.getCisGrade()); // 검사 판정
+        cistDTO.setOrientation(cist.getOrientation()); // 지남력 점수
+        cistDTO.setAttention(cist.getAttention()); // 주의력 점수
+        cistDTO.setSpatialTemporal(cist.getSpatialTemporal()); // 시공간 능력 점수
+        cistDTO.setExecutiveFunction(cist.getExecutiveFunction()); // 집행기능 점수
+        cistDTO.setMemory(cist.getMemory()); // 기억력 점수
+        cistDTO.setLanguage(cist.getLanguage()); // 언어 기능 점수
+        cistDTO.setTotalScore(cist.getTotalScore()); // 총합 점수
+        cistDTO.setCisModifyDt(cist.getCisModifyDt()); // 수정 날짜
+
+        // 환자 이름과 Giver ID를 가져옴
+        cistDTO.setResName(cist.getResident().getResName()); // 환자 이름
+        cistDTO.setGiverId(cist.getGiver().getGiverId()); // Giver ID
+
+        // 레지던트 ID 설정
+        cistDTO.setResidentId(cist.getResident().getResId()); // 환자 ID
+
+        return cistDTO;
     }
 }
