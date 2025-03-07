@@ -200,8 +200,8 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public Guard createResidentGuard(GuardDTO guardDTO) {
-        User user = userRepository.findByRealname(guardDTO.getRealname())
-                .orElseThrow(() -> new RuntimeException("이름을 찾지 못했습니다." + guardDTO.getRealname()));
+        User user = userRepository.findBySsn(guardDTO.getSsn())
+                .orElseThrow(() -> new RuntimeException("이름을 찾지 못했습니다." + guardDTO.getSsn()));
         Long resId = guardDTO.getResId();
         Resident resident = residentRepository.findById(resId)
                 .orElseThrow(() -> new RuntimeException("입소자 정보가 없습니다." + resId));
