@@ -1,16 +1,11 @@
 package com.smartcarebackend.controller;
 
 import com.smartcarebackend.dto.MealDTO;
-import com.smartcarebackend.dto.ResidentDTO;
-import com.smartcarebackend.dto.UserDTO;
 import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Resident;
-import com.smartcarebackend.model.User;
 import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.repositories.ResidentRepository;
 import com.smartcarebackend.service.MealService;
-import com.smartcarebackend.service.ResidentService;
-import com.smartcarebackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -121,5 +116,12 @@ public class MealController {
         // 관리자가 특정 식사 일지를 삭제하는 서비스 호출
         mealService.deleteMealForAdmin(medId);
         return ResponseEntity.noContent().build(); // 삭제 성공 시 204 No Content 반환
+    }
+
+    //보호자와 연결된 환자의 식사일지 리스트 가져오기
+    @GetMapping("/status/{guardId}")
+    public ResponseEntity<List<MealDTO>> getMealForStatus(@PathVariable Long guardId){
+        List<MealDTO> mealDTOList= mealService.getStatusMealByGuardId(guardId);
+        return ResponseEntity.ok(mealDTOList);
     }
 }

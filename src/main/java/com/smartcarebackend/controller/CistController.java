@@ -3,6 +3,7 @@ package com.smartcarebackend.controller;
 import com.smartcarebackend.dto.CistDTO;
 
 import com.smartcarebackend.dto.MealDTO;
+import com.smartcarebackend.model.Cist;
 import com.smartcarebackend.model.Resident;
 import com.smartcarebackend.repositories.CistRepository;
 import com.smartcarebackend.repositories.ResidentRepository;
@@ -26,6 +27,11 @@ public class CistController {
     @Autowired
     private ResidentRepository residentRepository;
 
+    @Autowired
+    private GuardRepository guardRepository;
+
+    @Autowired
+    private CistRepository cistRepository;
 
     // ✅ 특정 대상자의 검사 기록을 리스트로 조회 (테이블용)
     @GetMapping("/list/{residentId}")
@@ -33,14 +39,12 @@ public class CistController {
         return ResponseEntity.ok(cistService.getCistByResident(residentId));
     }
 
-    @Autowired
-    private GuardRepository guardRepository;
-
-    //생활현황의 cist검사 데이터 가져오기(/api/cist)
-    @GetMapping
-    public ResponseEntity<List<CistDTO>> getStatusCists(@PathVariable Long guardId) {
-        Guard getGuard = guardRepository.findById(guardId).orElseThrow(()-> new RuntimeException("보호자 정보를 찾을 수 없습니다."));
-        return  null;
+    //생활현황의 cist검사 데이터 가져오기
+    @GetMapping("/status/{guardId}")
+    public ResponseEntity<List<CistDTO>> getStatusForCists(@PathVariable Long guardId) {
+        //guardId로 CistDTO 리스트 가져오기
+        List<CistDTO> cistDTOList = cistService.getStatusCistByGuardId(guardId);
+        return  ResponseEntity.ok(cistDTOList);
     }
 
     // ✅ 특정 대상자의 검사 기록을 조회 (그래프 데이터 제공)
@@ -69,7 +73,6 @@ public class CistController {
     // 검사 환자 조회
     @GetMapping("/admin")
     public ResponseEntity<List<CistDTO>> getAllCistsForAdmin() {
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         // 관리자가 모든 식사 일지를 조회하는 서비스 호출
         List<CistDTO> cistDTOs = cistService.getAllCistsForAdmin();
         System.out.println("cistDTO의 위치는"+cistDTOs);

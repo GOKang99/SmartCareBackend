@@ -4,15 +4,18 @@ package com.smartcarebackend.service.impl;
 import com.smartcarebackend.dto.CompositionDTO;
 import com.smartcarebackend.model.Composition;
 import com.smartcarebackend.model.Giver;
+import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Resident;
 import com.smartcarebackend.repositories.CompositionRepository;
 import com.smartcarebackend.repositories.GiverRepository;
+import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.repositories.ResidentRepository;
 import com.smartcarebackend.service.CompositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,8 @@ public class CompositionImpl implements CompositionService {
     private ResidentRepository residentRepository;
     @Autowired
     private GiverRepository giverRepository;
+    @Autowired
+    private GuardRepository guardRepository;
 
 
 
@@ -57,9 +62,7 @@ public class CompositionImpl implements CompositionService {
         return toDTO(savedComposition);
 
     }
-
-
-
+    
     //compostionId로 삭제하기
     @Override
     public void deleteComposition(Long comId) {
@@ -91,7 +94,24 @@ public class CompositionImpl implements CompositionService {
         return toDTO(updatedComposition);
 
     }
-
+    
+    //보호자와 연결된 환자의 체성분 리스트 가져오기
+    @Override
+    public List<CompositionDTO> getStatusCompositionByGuardId(Long guardId) {
+        Guard guard = guardRepository.findById(guardId).get();
+        Resident resident = guard.getResident();
+        List<Composition> getCompositions = compositionRepository.findByResidentOrderByComIdDesc(resident);
+        System.out.println("이미지찾기"+getCompositions);
+        List<CompositionDTO> compositionDTOs = new ArrayList<>();
+        if(getCompositions.size()==0){
+            return compositionDTOs;
+        }
+        for(Composition composition : getCompositions){
+            CompositionDTO compositionDTO = toDTO(composition);
+            compositionDTOs.add(compositionDTO);
+        }
+        return compositionDTOs;
+    }
 
     // Entity -> DTO 변환
     public  CompositionDTO toDTO(Composition composition) {
