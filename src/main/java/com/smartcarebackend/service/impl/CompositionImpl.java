@@ -2,6 +2,7 @@ package com.smartcarebackend.service.impl;
 
 
 import com.smartcarebackend.dto.CompositionDTO;
+import com.smartcarebackend.exception.NotFoundException;
 import com.smartcarebackend.model.Composition;
 import com.smartcarebackend.model.Giver;
 import com.smartcarebackend.model.Resident;
@@ -42,11 +43,12 @@ public class CompositionImpl implements CompositionService {
         Composition composition = toEntity(compositionDTO);
         //받아온 환자 Id를 통해서 환자 찾기
         Resident resident = residentRepository.findById(resId)
-                .orElseThrow(()->new RuntimeException("예약 생성시 환자 Id에 따른 환자가 없습니다."));
+                .orElseThrow(()->new NotFoundException("없는 환자를 왜 등록하시죠?"));
+
         composition.setComResName(resident.getResName());
         //받아온 요양보호사 Id를 통해서 등록하는 요양보호사 찾기.
         Giver giver = giverRepository.findById(giverId)
-                .orElseThrow(()->new RuntimeException("예약 생성시 요양보호사Id에 따른 환자를 찾을수 없습니다. "));
+                .orElseThrow(()->new RuntimeException("유효하지 않은 요양보호사 ID입니다. "));
 
         //체성분 분석 엔티티에 환자 정보 등록.
         composition.setResident(resident);
