@@ -51,12 +51,16 @@ public class ResidentController {
 
     @PutMapping("/guard")
     public ResponseEntity<Guard> registerGuard(@RequestBody GuardDTO guardDTO) {
-        System.out.println("내용: " + guardDTO);
         try{
             Guard guard = residentService.createResidentGuard(guardDTO);
             return ResponseEntity.ok(guard);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+
+    @GetMapping("/{resId}/guard")
+    public List<GuardDTO> getResidentGuards(@PathVariable Long resId, GuardDTO guardDTO) {
+        return residentService.getAllResidentGuards(resId, guardDTO);
     }
 }

@@ -26,4 +26,7 @@ public interface ResidentService {
 
     // 보호자 등록
     Guard createResidentGuard(GuardDTO guardDTO);
+
+    // 보호자 정보 조회
+    List<GuardDTO> getAllResidentGuards(Long resId, GuardDTO guardDTO);
 }

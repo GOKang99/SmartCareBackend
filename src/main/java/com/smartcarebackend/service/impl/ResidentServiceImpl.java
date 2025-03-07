@@ -20,8 +20,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -198,13 +201,36 @@ public class ResidentServiceImpl implements ResidentService {
     @Override
     public Guard createResidentGuard(GuardDTO guardDTO) {
         User user = userRepository.findByRealname(guardDTO.getRealname())
-                .orElseThrow(() -> new RuntimeException("Guard not found with ssn: " + guardDTO.getRealname()));
+                .orElseThrow(() -> new RuntimeException("이름을 찾지 못했습니다." + guardDTO.getRealname()));
         Long resId = guardDTO.getResId();
         Resident resident = residentRepository.findById(resId)
-                .orElseThrow(() -> new RuntimeException("Resident not found with id: " + resId));
+                .orElseThrow(() -> new RuntimeException("입소자 정보가 없습니다." + resId));
         Guard guard = user.getGuard();
         guard.setResident(resident);
 
         return guardRepository.save(guard);
+    }
+
+    @Override
+    public List<GuardDTO> getAllResidentGuards(Long resId, GuardDTO guardDTO) {
+
+        Resident resident = residentRepository.findByResId(resId)
+                .orElseThrow(() -> new RuntimeException("입소자 정보가 없습니다." + resId));
+
+        List<Guard> guard = guardRepository.findByResident(resident);
+        List<GuardDTO> guardDTOs = guard.stream()
+                .map(guards -> {
+                    User user = guards.getUser();  // Guard와 연결된 User 정보
+                    return new GuardDTO(
+                            guards.getRelation(),              // relation (보호자와의 관계)
+                            user.getPhone(),                  // User의 전화번호
+                            user.getSsn(),                    // User의 주민등록번호
+                            resident.getResId(),              // 입소자의 ID
+                            user.getRealname()                // User의 실명
+                    );
+                })
+                .collect(Collectors.toList());
+
+        return guardDTOs;
     }
 }
