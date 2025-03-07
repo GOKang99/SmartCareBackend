@@ -16,4 +16,6 @@ void createNotice(NoticeDTO noticeDTO);
     boolean deleteNotice(Long noticeId);
 
     boolean updateNotice(Long noticeId, NoticeDTO noticeDTO);
+
+    void incrementNoticeCount(Long noticeId);
 }
