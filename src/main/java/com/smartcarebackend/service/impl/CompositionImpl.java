@@ -33,7 +33,10 @@ public class CompositionImpl implements CompositionService {
     @Override
     public List<CompositionDTO> getCompositionsByResId(Long resId) {
         List<Composition> compositions = compositionRepository.findAllByResident_ResId(resId);
-        return compositions.stream().map(this::toDTO).collect(Collectors.toList());
+        return compositions
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
     //관리자가 환자 Id를 가지고 체성분 분석 자료  생성
@@ -91,6 +94,16 @@ public class CompositionImpl implements CompositionService {
 
         Composition updatedComposition = compositionRepository.save(composition);
         return toDTO(updatedComposition);
+
+    }
+
+    //모든 체성분 분석 가져오기
+    @Override
+    public List<CompositionDTO> getAllCompositions() {
+        return compositionRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
 
     }
 

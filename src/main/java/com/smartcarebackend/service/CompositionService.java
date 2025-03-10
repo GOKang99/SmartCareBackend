@@ -14,4 +14,5 @@ public interface CompositionService {
 
     CompositionDTO updateComposition(Long comId, Long updatedBy, CompositionDTO compositionDTO);
 
+    List<CompositionDTO> getAllCompositions();
 }
