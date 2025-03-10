@@ -59,4 +59,10 @@ public class ResidentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
+    @GetMapping("/status/{guardId}")
+    public ResponseEntity<ResidentDTO> getResidentStatus(@PathVariable Long guardId){
+        ResidentDTO ResidentDTO =residentService.getResidentGuardById(guardId);
+        return ResponseEntity.ok(ResidentDTO);
+    }
 }

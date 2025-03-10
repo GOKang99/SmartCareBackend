@@ -41,8 +41,12 @@ public class NoticeController {
     @GetMapping("/{noticeId}")
     public ResponseEntity<NoticeDTO> getNotice(@PathVariable Long noticeId) {
         Notice notice = noticeService.getNoticeById(noticeId);
+
+        //조회수 증가 및 저장
+        noticeService.incrementNoticeCount(notice.getNoticeId());
+
         NoticeDTO noticeDTO = convertToDTO(notice);
-        System.out.println("공지사항데이터: "+noticeDTO);
+//        System.out.println("공지사항데이터: "+noticeDTO);
         return ResponseEntity.ok(noticeDTO);
     }
 
@@ -87,6 +91,7 @@ public class NoticeController {
                 notice.getNoticeImageUrls(),
                 null,
                 notice.getGiver().getUser().getUsername(),
+                notice.getGiver().getUser().getRealname(),
                 giverId,
                 new ArrayList<>()
         );

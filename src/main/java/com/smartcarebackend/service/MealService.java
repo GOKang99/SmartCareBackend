@@ -26,4 +26,7 @@ public interface MealService {
     // 식사 일지 삭제 (관리자만)
     void deleteMealForAdmin(Long medId);
 
+    //보호자와 연결된 환자의 식사일지 리스트 가져오기
+    List<MealDTO> getStatusMealByGuardId(Long guardId);
+
 }

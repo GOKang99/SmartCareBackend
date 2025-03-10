@@ -23,6 +23,7 @@ public class NoticeDTO {
     private List<String> noticeImageURL; // DB 저장용, 여러개의 이미지 URL 저장
     private List<MultipartFile> noticeImageFiles; // 업로드할 파일 리스트
     private String username;
+    private String giverName;
     private Long giverId;
 
     private List<String> deletedImages;

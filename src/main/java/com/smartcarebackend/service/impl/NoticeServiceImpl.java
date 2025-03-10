@@ -9,6 +9,7 @@ import com.smartcarebackend.repositories.NoticeRepository;
 import com.smartcarebackend.repositories.UserRepository;
 import com.smartcarebackend.service.FileService;
 import com.smartcarebackend.service.NoticeService;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,8 +42,14 @@ public class NoticeServiceImpl implements NoticeService {
     // 공지사항 상세보기
     @Override
     public Notice getNoticeById(Long noticeId) {
-        return noticeRepository.findById(noticeId)
+        Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new RuntimeException("공지사항을 찾을 수 없습니다." + noticeId));
+
+        noticeRepository.save(notice);
+
+        return notice;
+
+
     }
 
     @Override
@@ -93,7 +100,16 @@ public class NoticeServiceImpl implements NoticeService {
         noticeRepository.save(notice);
         return true;
     }
-    
+
+    @Override
+    public void incrementNoticeCount(Long noticeId) {
+        Notice notice = noticeRepository.findById(noticeId)
+                .orElseThrow(()-> new RuntimeException("공지사항을 찾을 수 없습니다. ID: " + noticeId));
+
+        notice.setNoticeCount(notice.getNoticeCount() + 1);
+        noticeRepository.save(notice);
+    }
+
     // 공지사항 생성
     @Override
     public void createNotice(NoticeDTO noticeDTO) {

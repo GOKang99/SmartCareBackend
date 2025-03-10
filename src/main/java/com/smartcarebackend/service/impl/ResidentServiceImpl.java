@@ -26,6 +26,7 @@ import java.util.List;
 
 @Service
 public class ResidentServiceImpl implements ResidentService {
+
     @Autowired
     private ResidentRepository residentRepository;
 
@@ -207,5 +208,44 @@ public class ResidentServiceImpl implements ResidentService {
         guard.setResident(resident);
 
         return guardRepository.save(guard);
+    }
+
+    //보호자와 연결된 환자의 정보 가져오기
+    @Override
+    public ResidentDTO getResidentGuardById(Long guardId) {
+        Guard getGuard = guardRepository.findById(guardId).orElseThrow(() -> new RuntimeException("환자정보 조회 중 보호자 정보를 찾지 못했습니다")); //보호자 엔티티 찾아오기
+        Resident resident = getGuard.getResident(); //보호자와 연결된 환자 엔티티
+        ResidentDTO residentDTO = convertToResidentDTO(resident);
+        return residentDTO;
+    }
+
+    //엔티티 -> DTO
+    private ResidentDTO convertToResidentDTO(Resident resident) {
+        ResidentDTO residentDTO = new ResidentDTO(); //새로운 DTO객체 생성
+
+        residentDTO.setResName(resident.getResName()); // 이름
+        residentDTO.setResGender(resident.getResGender()); // 성별
+        residentDTO.setResBirth(resident.getResBirth()); // 생년월일
+        residentDTO.setResPhone(resident.getResPhone()); // 전화번호
+        residentDTO.setResGrade(resident.getResGrade()); // 등급
+        residentDTO.setResDisease(resident.getResDisease()); // 주요질환
+        residentDTO.setResLocation(resident.getResLocation()); // 생활실
+        residentDTO.setResEnterDate(resident.getResEnterDate()); // 입소일
+        residentDTO.setResExitDate(resident.getResExitDate()); // 퇴소일
+        residentDTO.setResAddress(resident.getResAddress()); // 주소
+        residentDTO.setResSchoolGrade(resident.getResSchoolGrade()); // 최종학력
+        residentDTO.setResLongTermCareNo(resident.getResLongTermCareNo()); // 장기요양인정번호
+        residentDTO.setResCareGroup(resident.getResCareGroup()); // 케어그룹
+        residentDTO.setResFoodType(resident.getResFoodType()); // 식사종류
+        residentDTO.setResFunctionDis(resident.getResFunctionDis()); // 기능장애
+
+        // 요양보호사 ID와 이미지 주소는 추가적인 정보로 설정
+        residentDTO.setGiverId(resident.getGiver().getGiverId()); // 요양보호사 ID
+        residentDTO.setSystemResCode(resident.getSystemResCode()); // 시스템 코드
+        if ((resident.getResImageAddress() != null) && !resident.getResImageAddress().isEmpty()) {
+            residentDTO.setResImageAddress(resident.getResImageAddress());
+        }
+
+        return residentDTO; // 변환된 DTO 반환
     }
 }
