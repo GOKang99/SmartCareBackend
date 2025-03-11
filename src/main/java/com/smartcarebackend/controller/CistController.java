@@ -3,9 +3,12 @@ package com.smartcarebackend.controller;
 import com.smartcarebackend.dto.CistDTO;
 
 import com.smartcarebackend.dto.MealDTO;
+import com.smartcarebackend.model.Cist;
 import com.smartcarebackend.model.Resident;
 import com.smartcarebackend.repositories.CistRepository;
 import com.smartcarebackend.repositories.ResidentRepository;
+import com.smartcarebackend.model.Guard;
+import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.service.CistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,11 @@ public class CistController {
     @Autowired
     private ResidentRepository residentRepository;
 
+    @Autowired
+    private GuardRepository guardRepository;
+
+    @Autowired
+    private CistRepository cistRepository;
 
     // ✅ 특정 대상자의 검사 기록을 리스트로 조회 (테이블용) 유저페이지
     @GetMapping("/list/{residentId}")
@@ -31,7 +39,15 @@ public class CistController {
         return ResponseEntity.ok(cistService.getCistByResident(residentId));
     }
 
-    // ✅ 특정 대상자의 검사 기록을 조회 (그래프 데이터 제공) 유저페이지
+    //생활현황의 cist검사 데이터 가져오기
+    @GetMapping("/status/{guardId}")
+    public ResponseEntity<List<CistDTO>> getStatusForCists(@PathVariable Long guardId) {
+        //guardId로 CistDTO 리스트 가져오기
+        List<CistDTO> cistDTOList = cistService.getStatusCistByGuardId(guardId);
+        return  ResponseEntity.ok(cistDTOList);
+    }
+
+    // ✅ 특정 대상자의 검사 기록을 조회 (그래프 데이터 제공)
     @GetMapping("/graph/{residentId}")
     public ResponseEntity<List<Map<String, Object>>> getGraphData(@PathVariable Long residentId) {
         List<CistDTO> cistList = cistService.getCistByResident(residentId);
@@ -54,7 +70,7 @@ public class CistController {
         return ResponseEntity.ok(response);
     }
 
-    // 검사 환자 조회 어드민페이지
+    // 검사 환자 조회
     @GetMapping("/admin")
     public ResponseEntity<List<CistDTO>> getAllCistsForAdmin() {
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -64,12 +80,9 @@ public class CistController {
         return ResponseEntity.ok(cistDTOs); // 조회된 데이터를 200 OK와 함께 반환
     }
 
-    // ✅ Cist 추가 어드민페이지
+    // ✅ Cist 추가
     @PostMapping("/admin")
     public ResponseEntity<CistDTO> createCist(@RequestBody CistDTO cistDTO) {
-        System.out.println("~~~~~~~~~~~~");
-        System.out.println("디티오는"+cistDTO);
-
         // 필수 값 검증
         if (cistDTO.getResidentId() == null) {
             throw new IllegalArgumentException("Resident ID가 없습니다.");

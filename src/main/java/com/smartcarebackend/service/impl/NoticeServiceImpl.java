@@ -7,16 +7,19 @@ import com.smartcarebackend.model.User;
 import com.smartcarebackend.repositories.GiverRepository;
 import com.smartcarebackend.repositories.NoticeRepository;
 import com.smartcarebackend.repositories.UserRepository;
+import com.smartcarebackend.service.FileService;
 import com.smartcarebackend.service.NoticeService;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class NoticeServiceImpl implements NoticeService {
@@ -26,8 +29,9 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Autowired
     private UserRepository userRepository;
+    
     @Autowired
-    private GiverRepository giverRepository;
+    private FileService fileService; 
 
     // 공지사항 목록을 날짜 기준 내림차순으로 정렬하여 가져오기
     @Override
@@ -38,10 +42,75 @@ public class NoticeServiceImpl implements NoticeService {
     // 공지사항 상세보기
     @Override
     public Notice getNoticeById(Long noticeId) {
-        return noticeRepository.findById(noticeId)
+        Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new RuntimeException("공지사항을 찾을 수 없습니다." + noticeId));
+
+        noticeRepository.save(notice);
+
+        return notice;
+
+
     }
 
+    @Override
+    public boolean deleteNotice(Long noticeId) {
+        if(noticeRepository.existsById(noticeId)) {
+            noticeRepository.deleteById(noticeId);
+            return true;
+        }
+        return false;
+    }
+    
+    // 공지사항 수정
+    @Override
+    public boolean updateNotice(Long noticeId, NoticeDTO noticeDTO) {
+        Notice notice = noticeRepository.findById(noticeId)
+                .orElseThrow(()->new RuntimeException("공지사항을 찾을 수 없습니다. ID: " + noticeId));
+        
+        // 공지사항 제목 및 내용 업데이트
+        notice.setNoticeTitle(noticeDTO.getNoticeTitle());
+        notice.setNoticeContent(noticeDTO.getNoticeContent());
+        notice.setNoticeUpdate(LocalDateTime.now());
+        notice.setNoticeType(noticeDTO.getNoticeType());
+
+        //기존 이미지 리스트 가져오기
+        List<String> existingFileUrls = notice.getNoticeImageUrls();
+        if(existingFileUrls == null) {
+            existingFileUrls = new ArrayList<>();
+        }
+
+        // ✅ 삭제할 이미지가 있다면 실제 파일 삭제 및 DB에서도 제거
+        if (noticeDTO.getDeletedImages() != null && !noticeDTO.getDeletedImages().isEmpty()) {
+            for (String imageUrl : noticeDTO.getDeletedImages()) {
+                fileService.deleteFile(imageUrl);
+                existingFileUrls.remove(imageUrl);
+            }
+        }
+
+        // 새이미지 저장
+        try {
+            if (noticeDTO.getNoticeImageFiles() != null && !noticeDTO.getNoticeImageFiles().isEmpty()) {
+                List<String> newFileUrls = fileService.saveFiles(noticeDTO.getNoticeImageFiles());
+                existingFileUrls.addAll(newFileUrls);
+            }
+        }catch (IOException e){
+            throw new RuntimeException("파일 저장 실패", e);
+        }
+        notice.setNoticeImageUrls(existingFileUrls); // 수정된 이미지 리스트 저장
+        noticeRepository.save(notice);
+        return true;
+    }
+
+    @Override
+    public void incrementNoticeCount(Long noticeId) {
+        Notice notice = noticeRepository.findById(noticeId)
+                .orElseThrow(()-> new RuntimeException("공지사항을 찾을 수 없습니다. ID: " + noticeId));
+
+        notice.setNoticeCount(notice.getNoticeCount() + 1);
+        noticeRepository.save(notice);
+    }
+
+    // 공지사항 생성
     @Override
     public void createNotice(NoticeDTO noticeDTO) {
 
@@ -63,6 +132,14 @@ public class NoticeServiceImpl implements NoticeService {
             notice.setGiver(user.getGiver());
         } else {
             throw new RuntimeException("User not found" + username);
+        }
+
+        //파일 저장 및 URL 리스트 반환
+        try {
+            List<String> fileUrls = fileService.saveFiles(noticeDTO.getNoticeImageFiles());
+            notice.setNoticeImageUrls(fileUrls); // 파일URL저장
+        } catch (IOException e) {
+            throw new RuntimeException("파일 저장 실패", e);
         }
 
         noticeRepository.save(notice);

@@ -20,4 +20,7 @@ public interface CistService {
 
     // 특정 레지던트의 Cist 조회 (관리자 페이지)
     List<CistDTO> getCistsForAdmin(Long resId);
+
+    // 가드id로 연결된 환자의 cist정보 가져오기
+    List<CistDTO> getStatusCistByGuardId(Long guardId);
 }

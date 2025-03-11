@@ -2,9 +2,11 @@ package com.smartcarebackend.service.impl;
 
 import com.smartcarebackend.dto.MealDTO;
 import com.smartcarebackend.model.Giver;
+import com.smartcarebackend.model.Guard;
 import com.smartcarebackend.model.Meal;
 import com.smartcarebackend.model.Resident;
 import com.smartcarebackend.repositories.GiverRepository;
+import com.smartcarebackend.repositories.GuardRepository;
 import com.smartcarebackend.repositories.MealRepository;
 import com.smartcarebackend.repositories.ResidentRepository;
 import com.smartcarebackend.service.MealService;
@@ -23,6 +25,8 @@ public class MealServiceImpl implements MealService {
     private ResidentRepository residentRepository;
     @Autowired
     private GiverRepository giverRepository;
+    @Autowired
+    private GuardRepository guardRepository;
 
     // 환자 식사 일지 조회 (환자 페이지)
     @Override
@@ -194,6 +198,46 @@ public class MealServiceImpl implements MealService {
         Meal meal = mealRepository.findById(medId)
                 .orElseThrow(() -> new IllegalArgumentException("Meal not found"));
         mealRepository.delete(meal);
+    }
+
+    //보호자와 연결된 환자의 식사일지 리스트 가져오기
+    @Override
+    public List<MealDTO> getStatusMealByGuardId(Long guardId) {
+        Guard getGuard = guardRepository.findById(guardId).orElseThrow(()->new RuntimeException("식사일지 조회 중 보호자 정보를 찾지 못했습니다"));
+        Resident resident = getGuard.getResident();
+        List<Meal> getMeals=mealRepository.findByResidentOrderByMedIdDesc(resident);
+        List<MealDTO> mealDTOs=new ArrayList<>();
+        if(getMeals.size()==0){
+            return mealDTOs;
+        }
+        for(Meal meal:getMeals){
+            MealDTO mealDTO = convertToMealDTO(meal);
+            mealDTOs.add(mealDTO);
+        }
+        return mealDTOs;
+    }
+
+    //엔티티 -> DTO
+    private MealDTO convertToMealDTO(Meal meal) {
+        MealDTO mealDTO = new MealDTO(); //새로운 MealDTO생성
+
+        mealDTO.setMedId(meal.getMedId());
+        mealDTO.setMeaDt(meal.getMeaDt());
+        mealDTO.setFundDis(meal.getFundDis());
+        mealDTO.setBreTp(meal.getBreTp());
+        mealDTO.setBreQty(meal.getBreQty());
+        mealDTO.setLunTp(meal.getLunTp());
+        mealDTO.setLunQty(meal.getLunQty());
+        mealDTO.setDinTp(meal.getDinTp());
+        mealDTO.setDinQty(meal.getDinQty());
+        mealDTO.setMorSnackQty(meal.getMorSnackQty());
+        mealDTO.setAftSnackQty(meal.getAftSnackQty());
+        mealDTO.setRemark(meal.getRemark());
+        mealDTO.setResMealId(meal.getResident().getResId());
+        mealDTO.setResName(meal.getResident().getResName());
+        mealDTO.setGiver(meal.getGiver().getGiverId());
+
+        return mealDTO;
     }
 
 }

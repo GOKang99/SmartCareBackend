@@ -54,4 +54,5 @@ public class ResidentDTO {
     private String resFunctionDis; // 기능장애
 
     private MultipartFile resImages; // 입소자 사진
+    private String resImageAddress; //이미지 주소
 }

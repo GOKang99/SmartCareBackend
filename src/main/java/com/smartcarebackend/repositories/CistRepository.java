@@ -1,6 +1,7 @@
 package com.smartcarebackend.repositories;
 
 import com.smartcarebackend.model.Cist;
+import com.smartcarebackend.model.Resident;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface CistRepository extends JpaRepository<Cist, Long> {
     List<Cist> findByResidentResIdOrderByCisDtDesc(Long resId);
 
     List<Cist> findByResident_ResId(Long resId);
+
+    List<Cist> findByResidentOrderByCisIdDesc(Resident resident);
 }

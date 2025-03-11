@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "NOTICE")
@@ -35,9 +36,12 @@ public class Notice {
 
     @Column(name = "NOTICE_COUNT", nullable = false)
     private int noticeCount = 0; // 공지 조회수 (기본값 : 0 )
-
-    @Column(name = "NOTICE_IMAGEURL")
-    private String noticeImageUrl;  // 공지 내용 사진 URL
+    
+    // 여러개의 이미지 URL 저장
+    @ElementCollection
+    @CollectionTable(name = "NOTICE_IMAGES", joinColumns = @JoinColumn(name = "NOTICE_ID"))
+    @Column(name = "IMAGE_URL")
+    private List<String> noticeImageUrls;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "giver_id", referencedColumnName = "giverId")

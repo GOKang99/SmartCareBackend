@@ -12,4 +12,10 @@ List<Notice> getAllNotices();
 void createNotice(NoticeDTO noticeDTO);
 
     Notice getNoticeById(Long noticeId);
+
+    boolean deleteNotice(Long noticeId);
+
+    boolean updateNotice(Long noticeId, NoticeDTO noticeDTO);
+
+    void incrementNoticeCount(Long noticeId);
 }

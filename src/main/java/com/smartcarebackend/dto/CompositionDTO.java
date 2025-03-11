@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +22,8 @@ public class CompositionDTO {
     private Double comBmi;       // BMI
     private Integer comFatLvl;   // 내장지방레벨
     private String comResName; //환자 이름
+    private Long updatedBy;  // 수정한 사람 ID
+    private LocalDateTime updatedAt; // 수정한 시간
 
     private Long resId;  // 참조 관계 - resId환자 ID만 전달
     private Long giverId;  // 참조 관계 - Giver의 ID만 전달
