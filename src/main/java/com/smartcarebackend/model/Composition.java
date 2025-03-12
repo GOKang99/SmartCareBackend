@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -46,6 +47,11 @@ public class Composition {
     @Column(name = "COM_RES_NAME", nullable = false)
     private String comResName;
 
+    @Column(name = "UPDATED_BY")
+    private Long updatedBy; // 수정한 사람 ID
+
+    @Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt; // 수정한 시간
 
     //참조하기
     @ManyToOne(fetch = FetchType.LAZY)
