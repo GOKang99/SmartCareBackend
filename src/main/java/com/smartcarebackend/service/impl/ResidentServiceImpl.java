@@ -20,8 +20,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -90,8 +93,7 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setGiver(giver); // 요양보호사 ID
         resident.setResName(residentDTO.getResName()); // 이름
         resident.setResGender(residentDTO.getResGender()); // 성별
-        resident.setResBirth(residentDTO.getResBirth());
-        ; // 생년월일
+        resident.setResBirth(residentDTO.getResBirth()); // 생년월일
         resident.setResPhone(residentDTO.getResPhone()); // 전화번호
         resident.setResGrade(residentDTO.getResGrade()); // 등급
         resident.setDementiaYn(residentDTO.isDementiaYn()); // 치매 유무
@@ -110,7 +112,10 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setResCareGroup(residentDTO.getResCareGroup()); // 케어그룹
         resident.setResFoodType(residentDTO.getResFoodType()); // 식사종류
         resident.setResFunctionDis(residentDTO.getResFunctionDis()); // 기능장애
-
+        resident.setResAdmissionYn(residentDTO.getResAdmissionYn()); // 재입소 여부
+        resident.setKoreanReadableYn(residentDTO.getKoreanReadableYn()); // 한글 해독
+        resident.setReligion(residentDTO.getReligion()); // 종교
+        resident.setMaritalStatus(residentDTO.getMaritalStatus()); // 결혼여부
         resident.setResImageAddress(resFileName); // 이미지 주소
 
         return residentRepository.save(resident);
@@ -143,8 +148,7 @@ public class ResidentServiceImpl implements ResidentService {
 
         resident.setResName(residentDTO.getResName()); // 이름
         resident.setResGender(residentDTO.getResGender()); // 성별
-        resident.setResBirth(residentDTO.getResBirth());
-        ; // 생년월일
+        resident.setResBirth(residentDTO.getResBirth()); // 생년월일
         resident.setResPhone(residentDTO.getResPhone()); // 전화번호
         resident.setResGrade(residentDTO.getResGrade()); // 등급
         resident.setDementiaYn(residentDTO.isDementiaYn()); // 치매 유무
@@ -161,6 +165,10 @@ public class ResidentServiceImpl implements ResidentService {
         resident.setResCareGroup(residentDTO.getResCareGroup()); // 케어그룹
         resident.setResFoodType(residentDTO.getResFoodType()); // 식사종류
         resident.setResFunctionDis(residentDTO.getResFunctionDis()); // 기능장애
+        resident.setResAdmissionYn(residentDTO.getResAdmissionYn()); // 재입소 여부
+        resident.setKoreanReadableYn(residentDTO.getKoreanReadableYn()); // 한글 해독
+        resident.setReligion(residentDTO.getReligion()); // 종교
+        resident.setMaritalStatus(residentDTO.getMaritalStatus()); // 결혼여부
 
         return residentRepository.save(resident);
     }
@@ -198,16 +206,38 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Override
     public Guard createResidentGuard(GuardDTO guardDTO) {
-        System.out.println("가능?" + guardDTO.getSsn());
         User user = userRepository.findBySsn(guardDTO.getSsn())
-                .orElseThrow(() -> new RuntimeException("Guard not found with ssn: " + guardDTO.getSsn()));
+                .orElseThrow(() -> new RuntimeException("이름을 찾지 못했습니다." + guardDTO.getSsn()));
         Long resId = guardDTO.getResId();
         Resident resident = residentRepository.findById(resId)
-                .orElseThrow(() -> new RuntimeException("Resident not found with id: " + resId));
+                .orElseThrow(() -> new RuntimeException("입소자 정보가 없습니다." + resId));
         Guard guard = user.getGuard();
         guard.setResident(resident);
 
         return guardRepository.save(guard);
+    }
+
+    @Override
+    public List<GuardDTO> getAllResidentGuards(Long resId, GuardDTO guardDTO) {
+
+        Resident resident = residentRepository.findByResId(resId)
+                .orElseThrow(() -> new RuntimeException("입소자 정보가 없습니다." + resId));
+
+        List<Guard> guard = guardRepository.findByResident(resident);
+        List<GuardDTO> guardDTOs = guard.stream()
+                .map(guards -> {
+                    User user = guards.getUser();  // Guard와 연결된 User 정보
+                    return new GuardDTO(
+                            guards.getRelation(),              // relation (보호자와의 관계)
+                            user.getPhone(),                  // User의 전화번호
+                            user.getSsn(),                    // User의 주민등록번호
+                            resident.getResId(),              // 입소자의 ID
+                            user.getRealname()                // User의 실명
+                    );
+                })
+                .collect(Collectors.toList());
+
+        return guardDTOs;
     }
 
     //보호자와 연결된 환자의 정보 가져오기
