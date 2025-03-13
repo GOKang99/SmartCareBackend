@@ -116,7 +116,7 @@ public class SecondDummy implements CommandLineRunner {
             meal.setDinQty("1인분");
 
             meal.setMorSnackQty("반인분");
-
+//
             meal.setAftSnackQty("간단간식");
             meal.setMeaDt("2025-03-19");
             meal.setRemark("특이 사항 없음");
