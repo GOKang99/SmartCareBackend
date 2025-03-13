@@ -33,7 +33,7 @@ public class CistController {
     @Autowired
     private CistRepository cistRepository;
 
-    // ✅ 특정 대상자의 검사 기록을 리스트로 조회 (테이블용)
+    // ✅ 특정 대상자의 검사 기록을 리스트로 조회 (테이블용) 유저페이지
     @GetMapping("/list/{residentId}")
     public ResponseEntity<List<CistDTO>> getCistList(@PathVariable Long residentId) {
         return ResponseEntity.ok(cistService.getCistByResident(residentId));
@@ -73,6 +73,7 @@ public class CistController {
     // 검사 환자 조회
     @GetMapping("/admin")
     public ResponseEntity<List<CistDTO>> getAllCistsForAdmin() {
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         // 관리자가 모든 식사 일지를 조회하는 서비스 호출
         List<CistDTO> cistDTOs = cistService.getAllCistsForAdmin();
         System.out.println("cistDTO의 위치는"+cistDTOs);
@@ -82,6 +83,8 @@ public class CistController {
     // ✅ Cist 추가
     @PostMapping("/admin")
     public ResponseEntity<CistDTO> createCist(@RequestBody CistDTO cistDTO) {
+        System.out.println("📢 전달된 CistDTO: " + cistDTO); // 디버깅용 로그
+
         // 필수 값 검증
         if (cistDTO.getResidentId() == null) {
             throw new IllegalArgumentException("Resident ID가 없습니다.");
@@ -89,28 +92,46 @@ public class CistController {
         if (cistDTO.getCisDt() == null) {
             throw new IllegalArgumentException("CIST 날짜가 없습니다.");
         }
+        if (cistDTO.getResName() == null) {
+            throw new IllegalArgumentException("환자 이름이 없습니다.");
+        }
 
         CistDTO createdCist = cistService.createCist(cistDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCist);  // 201 Created 상태 코드 사용
     }
 
-    // ✅ Cist 수정
+    // ✅ Cist 수정 어드민페이지
     @PutMapping("/admin/{cisId}")
     public ResponseEntity<CistDTO> updateCist(@PathVariable Long cisId, @RequestBody CistDTO cistDTO) {
         CistDTO updatedCist = cistService.updateCist(cisId, cistDTO);
         return ResponseEntity.ok(updatedCist);
     }
 
-    // ✅ Cist 삭제
+    // ✅ Cist 삭제 어드민페이지
     @DeleteMapping("/admin/{cisId}")
     public ResponseEntity<Void> deleteCist(@PathVariable Long cisId) {
         cistService.deleteCist(cisId);
         return ResponseEntity.noContent().build();
     }
-    // 레지던트 찾아오기
+    // 레지던트 찾아오기 어드민페이지
     @GetMapping("/admin/residents")
     public ResponseEntity<List<Resident>> getAllMResidentsForAdmin() {
         List<Resident> residents = residentRepository.findAll();
         return ResponseEntity.ok(residents);
+    }
+    // 관리자 식사 일지 조회
+    @GetMapping("/admin/select")
+    public ResponseEntity<List<CistDTO>> getCistForAdmin(@RequestParam("residentId") Long resId) {
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~이것은");
+        System.out.println("레스아이디" + resId);
+        List<CistDTO> cistDTOs;
+        if (resId == 0) {
+            // 관리자가 모든 식사 일지를 조회하는 서비스 호출
+            cistDTOs = cistService.getAllCistsForAdmin();
+        } else {
+            // 관리자가 모든 식사 일지를 조회하는 서비스 호출
+            cistDTOs = cistService.getCistsForAdmin(resId);
+        }
+        return ResponseEntity.ok(cistDTOs); // 조회된 데이터를 200 OK와 함께 반환
     }
 }
