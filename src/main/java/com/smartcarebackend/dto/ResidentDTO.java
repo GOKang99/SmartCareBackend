@@ -1,5 +1,6 @@
 package com.smartcarebackend.dto;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -52,6 +53,14 @@ public class ResidentDTO {
     private String resFoodType; // 식사종류
 
     private String resFunctionDis; // 기능장애
+
+    private String resAdmissionYn; // 재입소 여부 (Y/N)
+
+    private String koreanReadableYn; // 한글 해독 가능 여부 (Y/N)
+
+    private String religion; // 종교 (예: 불교, 기독교 등)
+
+    private String maritalStatus; // 배우자 여부 ("기혼", "미혼", "사망")
 
     private MultipartFile resImages; // 입소자 사진
     private String resImageAddress; //이미지 주소
