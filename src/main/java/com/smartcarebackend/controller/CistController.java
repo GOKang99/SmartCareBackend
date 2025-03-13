@@ -83,12 +83,17 @@ public class CistController {
     // ✅ Cist 추가
     @PostMapping("/admin")
     public ResponseEntity<CistDTO> createCist(@RequestBody CistDTO cistDTO) {
+        System.out.println("📢 전달된 CistDTO: " + cistDTO); // 디버깅용 로그
+
         // 필수 값 검증
         if (cistDTO.getResidentId() == null) {
             throw new IllegalArgumentException("Resident ID가 없습니다.");
         }
         if (cistDTO.getCisDt() == null) {
             throw new IllegalArgumentException("CIST 날짜가 없습니다.");
+        }
+        if (cistDTO.getResName() == null) {
+            throw new IllegalArgumentException("환자 이름이 없습니다.");
         }
 
         CistDTO createdCist = cistService.createCist(cistDTO);

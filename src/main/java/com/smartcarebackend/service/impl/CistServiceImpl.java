@@ -84,14 +84,14 @@ public class CistServiceImpl implements CistService {
     @Transactional
     public CistDTO createCist(CistDTO dto) {
 
-        //점수 항목이 모두 입력되었는지체크
-//        if (dto.getOrientation() == null || dto.getAttention() == null ||
-//                dto.getSpatialTemporal() == null || dto.getExecutiveFunction() == null ||
-//                dto.getMemory() == null || dto.getLanguage() == null) {
-//            throw new IllegalArgumentException("모든 점수 항목을 입력해야 합니다.");
-//        }
+        // 필수 항목이 모두 입력되었는지 검증
+        if (dto.getOrientation() == null || dto.getAttention() == null ||
+                dto.getSpatialTemporal() == null || dto.getExecutiveFunction() == null ||
+                dto.getMemory() == null || dto.getLanguage() == null || dto.getCisDt() == null) {
+            throw new IllegalArgumentException("모든 점수 항목과 검사 날짜를 입력해야 합니다.");
+        }
 
-        //cist 객체 생성 후 데이터 설정
+        // 객체 생성 후 데이터 설정
         Cist cist = new Cist();
         cist.setOrientation(dto.getOrientation());
         cist.setAttention(dto.getAttention());
@@ -103,20 +103,22 @@ public class CistServiceImpl implements CistService {
 
         cist.setCisGrade(determineGrade(cist.getTotalScore()));
 
-        // Giver 및 Resident 객체 설정
+        // Giver와 Resident 엔티티 설정
         Giver giver = giverRepository.findById(dto.getGiverId()).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 Giver ID"));
         Resident resident = residentRepository.findById(dto.getResidentId()).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 Resident ID"));
 
         cist.setGiver(giver);
         cist.setResident(resident);
-        cist.setCisModifyDt(LocalDateTime.now().toString());  // 날짜를 String 형식으로 설정
+        cist.setCisDt(dto.getCisDt());  // Set the date of the test
+        cist.setCisModifyDt(LocalDateTime.now().toString());  // Set the modification date
 
-        // Cist 저장 후 반환
+        // Cist 저장 후 DTO 반환
         Cist savedCist = cistRepository.save(cist);
         dto.setCisId(savedCist.getCisId());
         dto.setTotalScore(savedCist.getTotalScore());
         return dto;
     }
+
     //cist 수정
     @Override
     @Transactional
