@@ -94,10 +94,14 @@ public class JwtUtils {
             User findUser = userRepository.findById(userId).get();
             Guard findGuard = findUser.getGuard();
             Long findGuardId=findGuard.getGuardId();
+            Long findResId = null;
+            if (findGuard.getResident() != null){
+            findResId=findGuard.getResident().getResId();}
             return Jwts.builder()
                     .subject(username)
                     .claim("userId", userId)
                     .claim("partId", findGuardId)
+                    .claim("resId",findResId)
                     .claim("role", role)
                     .issuedAt(new Date())
                     .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
